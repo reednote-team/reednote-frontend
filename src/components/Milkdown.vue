@@ -33,7 +33,4 @@ export default defineComponent({
 </script>
 
 <style scoped>
-body {
-  background-color: white;
-}
 </style>
