@@ -16,6 +16,7 @@ import { slash } from "@milkdown/plugin-slash";
 import { emoji } from "@milkdown/plugin-emoji";
 import { tooltip } from "@milkdown/plugin-tooltip";
 import { upload } from "@milkdown/plugin-upload"
+import { indent, indentPlugin } from '@milkdown/plugin-indent';
 
 
 export default defineComponent({
@@ -40,6 +41,13 @@ export default defineComponent({
             .use(emoji)
             .use(tooltip)
             .use(upload)
+            .use(
+                indent.configure(indentPlugin, {
+                  type: 'space',
+                  size: 4,
+                }),
+            )
+
     );
     return {
       editor,

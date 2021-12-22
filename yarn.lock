@@ -262,6 +262,15 @@
   dependencies:
     tslib "^2.3.1"
 
+"@milkdown/plugin-indent@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/@milkdown/plugin-indent/-/plugin-indent-5.3.0.tgz#54815cebe72cb3fbb979bfd0490308ad11644868"
+  integrity sha512-Dco9GiUZuHHRNB+SCR55joz+cKwWzCSUZDoaE4oId8kgzspFGh3/9EG+vrLbOvcWEHZqkycSe3PWvaIMbKzkbg==
+  dependencies:
+    "@emotion/css" "^11.1.3"
+    "@milkdown/utils" "5.3.0"
+    tslib "^2.3.1"
+
 "@milkdown/plugin-math@^5.3.0":
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/@milkdown/plugin-math/-/plugin-math-5.3.0.tgz#a301f455b93e749db71c0f31e81f9214ee3c2920"
