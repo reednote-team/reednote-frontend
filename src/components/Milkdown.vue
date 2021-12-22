@@ -11,6 +11,10 @@ import { commonmark } from "@milkdown/preset-commonmark";
 import { history } from "@milkdown/plugin-history";
 import { gfm } from '@milkdown/preset-gfm';
 import { clipboard } from "@milkdown/plugin-clipboard";
+import { cursor } from "@milkdown/plugin-cursor";
+import { slash } from '@milkdown/plugin-slash';
+import { emoji } from '@milkdown/plugin-emoji';
+import { tooltip } from '@milkdown/plugin-tooltip';
 
 
 export default defineComponent({
@@ -30,6 +34,10 @@ export default defineComponent({
             .use(history)
             .use(gfm)
             .use(clipboard)
+            .use(cursor)
+            .use(slash)
+            .use(emoji)
+            .use(tooltip)
     );
     return {
       editor,
