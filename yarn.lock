@@ -179,6 +179,13 @@
   dependencies:
     tslib "^2.3.1"
 
+"@milkdown/plugin-history@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/@milkdown/plugin-history/-/plugin-history-5.3.0.tgz#b60da429039a094ccae84265ca01877a282f252f"
+  integrity sha512-D10vbwPDu/8ifND+iwZjh00e8knN6rGNNnyYdAmeCFuEtnzFEotIkkJqI+sjuHYTVKjpecI3BokjDidaLiZQew==
+  dependencies:
+    tslib "^2.3.1"
+
 "@milkdown/plugin-table@^5.2.1":
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/@milkdown/plugin-table/-/plugin-table-5.3.0.tgz#44a5de1ca98ebd8efd712c8ed9f6327754f30a15"

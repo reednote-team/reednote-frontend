@@ -8,6 +8,7 @@ import { Editor, rootCtx, defaultValueCtx } from "@milkdown/core";
 import { nord } from "@milkdown/theme-nord";
 import { VueEditor, useEditor } from "@milkdown/vue";
 import { commonmark } from "@milkdown/preset-commonmark";
+import { history } from "@milkdown/plugin-history";
 
 
 export default defineComponent({
@@ -24,6 +25,7 @@ export default defineComponent({
             })
             .use(nord)
             .use(commonmark)
+            .use(history)
     );
     return {
       editor,
