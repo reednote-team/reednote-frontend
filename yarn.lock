@@ -179,6 +179,14 @@
   dependencies:
     tslib "^2.3.1"
 
+"@milkdown/plugin-clipboard@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/@milkdown/plugin-clipboard/-/plugin-clipboard-5.3.0.tgz#58b4d66e4a735d873d75fb6b8f973cb1fb932e3c"
+  integrity sha512-wSAMGZDDHAUxXV2dpmvIvucEqb0Ta+0WTieybt/Zq8JIQKBLyWi8aqfw1ojIOMHqr/eNcbYJa3/sIwnooETyfQ==
+  dependencies:
+    "@milkdown/utils" "5.3.0"
+    tslib "^2.3.1"
+
 "@milkdown/plugin-history@^5.3.0":
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/@milkdown/plugin-history/-/plugin-history-5.3.0.tgz#b60da429039a094ccae84265ca01877a282f252f"
@@ -186,7 +194,7 @@
   dependencies:
     tslib "^2.3.1"
 
-"@milkdown/plugin-table@^5.2.1":
+"@milkdown/plugin-table@5.3.0", "@milkdown/plugin-table@^5.3.0":
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/@milkdown/plugin-table/-/plugin-table-5.3.0.tgz#44a5de1ca98ebd8efd712c8ed9f6327754f30a15"
   integrity sha512-cJWhSMEsCKqw0IHHGvRnXRwN/qCj3GDixMZ4S3tEEigO8a3xpphd+cMPFnfJteU6ZwPAEg2g/CGz4yymsFq1Ww==
@@ -196,7 +204,7 @@
     remark-gfm "^3.0.0"
     tslib "^2.3.1"
 
-"@milkdown/preset-commonmark@^5.2.1":
+"@milkdown/preset-commonmark@5.3.0", "@milkdown/preset-commonmark@^5.2.1":
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/@milkdown/preset-commonmark/-/preset-commonmark-5.3.0.tgz#9a9707a7b850eb0fbf9eaa3827591d334856cc8b"
   integrity sha512-5TRKhAAm7fghk0mCduP3dVO2TN6AN0v/ZWP589cwQsAJI/WgrIAho6hj/DnG3+zVoUsyMmIJtO7VbeBYj3GhcA==
@@ -204,6 +212,17 @@
     "@emotion/css" "^11.1.3"
     "@milkdown/utils" "5.3.0"
     remark-inline-links "^6.0.0"
+    tslib "^2.3.1"
+
+"@milkdown/preset-gfm@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/@milkdown/preset-gfm/-/preset-gfm-5.3.0.tgz#4ad30cf377383fb7f6bb2acb7a8cd2c20e699f4a"
+  integrity sha512-iqZxogDrw+WI2gBrlbTlvl8vZ6UZ0SDm640+defwqRTzLY6B587/oHupWhKEH4IyDRT6kJh5irugmRhEjafCPg==
+  dependencies:
+    "@emotion/css" "^11.1.3"
+    "@milkdown/plugin-table" "5.3.0"
+    "@milkdown/preset-commonmark" "5.3.0"
+    "@milkdown/utils" "5.3.0"
     tslib "^2.3.1"
 
 "@milkdown/prose@5.3.0":
