@@ -302,6 +302,14 @@
     "@milkdown/utils" "5.3.0"
     tslib "^2.3.1"
 
+"@milkdown/plugin-upload@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/@milkdown/plugin-upload/-/plugin-upload-5.3.0.tgz#706f91312bd68f15f98c8afe47cfc4a8e9351699"
+  integrity sha512-4uHhAO/X/hJnuIqy54L9Z+cJL6dGYDHr25HBqvwTOvmW8EhV76RpaddnnFjbPdSE7wURJLGtme+yyaIdiIjJXA==
+  dependencies:
+    "@milkdown/utils" "5.3.0"
+    tslib "^2.3.1"
+
 "@milkdown/preset-commonmark@5.3.0", "@milkdown/preset-commonmark@^5.2.1":
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/@milkdown/preset-commonmark/-/preset-commonmark-5.3.0.tgz#9a9707a7b850eb0fbf9eaa3827591d334856cc8b"

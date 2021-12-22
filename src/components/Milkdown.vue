@@ -9,12 +9,13 @@ import { nord } from "@milkdown/theme-nord";
 import { VueEditor, useEditor } from "@milkdown/vue";
 import { commonmark } from "@milkdown/preset-commonmark";
 import { history } from "@milkdown/plugin-history";
-import { gfm } from '@milkdown/preset-gfm';
+import { gfm } from "@milkdown/preset-gfm";
 import { clipboard } from "@milkdown/plugin-clipboard";
 import { cursor } from "@milkdown/plugin-cursor";
-import { slash } from '@milkdown/plugin-slash';
-import { emoji } from '@milkdown/plugin-emoji';
-import { tooltip } from '@milkdown/plugin-tooltip';
+import { slash } from "@milkdown/plugin-slash";
+import { emoji } from "@milkdown/plugin-emoji";
+import { tooltip } from "@milkdown/plugin-tooltip";
+import { upload } from "@milkdown/plugin-upload"
 
 
 export default defineComponent({
@@ -38,6 +39,7 @@ export default defineComponent({
             .use(slash)
             .use(emoji)
             .use(tooltip)
+            .use(upload)
     );
     return {
       editor,

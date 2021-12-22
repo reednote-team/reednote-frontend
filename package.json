@@ -16,6 +16,7 @@
     "@milkdown/plugin-slash": "^5.3.0",
     "@milkdown/plugin-table": "^5.3.0",
     "@milkdown/plugin-tooltip": "^5.3.0",
+    "@milkdown/plugin-upload": "^5.3.0",
     "@milkdown/preset-commonmark": "^5.2.1",
     "@milkdown/preset-gfm": "^5.3.0",
     "@milkdown/theme-nord": "^5.2.1",
