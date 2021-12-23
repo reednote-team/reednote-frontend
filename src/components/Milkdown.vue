@@ -47,7 +47,6 @@ export default defineComponent({
                   size: 4,
                 }),
             )
-
     );
     return {
       editor,
