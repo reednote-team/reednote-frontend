@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import MilkdownEditorVue from './components/MilkdownEditor.vue';
-import GlobalHerder, { IUser } from './components/GlobalHerder.vue';
+import GlobalHerder, { IUser } from './components/GlobalHeader.vue';
 import 'material-icons'
 const testUser: IUser = {
   isLogin: true,
