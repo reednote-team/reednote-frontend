@@ -20,7 +20,4 @@ const testUser: IUser = {
 .container {
   @apply min-h-screen max-w-6xl bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 lg:rounded-xl md:rounded-md sm:rounded-none overflow-hidden my-2 mx-auto
 }
-body {
-  @apply bg-gray-200 dark:bg-gray-700;
-}
 </style>
