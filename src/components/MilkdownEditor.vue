@@ -12,14 +12,25 @@ import { emoji } from "@milkdown/plugin-emoji";
 import { tooltip } from "@milkdown/plugin-tooltip";
 import { upload } from "@milkdown/plugin-upload"
 import { indent, indentPlugin } from '@milkdown/plugin-indent';
+import { listener, listenerCtx } from '@milkdown/plugin-listener';
+
+let markdown = ""
 const editor = useEditor((root) =>
   Editor.make()
     .config((ctx) => {
-      ctx.set(rootCtx, root)
+      ctx.set(rootCtx, root);
+      ctx.set(listenerCtx, {
+        // SBYZB
+        markdown: [(get) => {
+          markdown = get()
+          console.log(markdown)
+        }],
+      });
     })
     .use(nord)
     .use(commonmark)
     .use(history)
+    .use(listener)
     .use(gfm)
     .use(clipboard)
     .use(cursor)
@@ -34,8 +45,19 @@ const editor = useEditor((root) =>
       }),
     )
 );
-
 </script>
+
+
+<!--<script lang="ts">-->
+<!--// SBYZB-->
+<!--export default {-->
+<!--  data() {-->
+<!--    return {-->
+<!--      md_content: markdown,-->
+<!--    }-->
+<!--  }-->
+<!--}-->
+<!--</script>-->
 
 <template>
   <VueEditor :editor="editor" />
