@@ -1,4 +1,5 @@
 <script setup lang='ts'>
+import { ref, watch } from "vue";
 import { Editor, rootCtx, defaultValueCtx } from "@milkdown/core";
 import { nord } from "@milkdown/theme-nord";
 import { VueEditor, useEditor } from "@milkdown/vue";
@@ -14,16 +15,28 @@ import { upload } from "@milkdown/plugin-upload"
 import { indent, indentPlugin } from '@milkdown/plugin-indent';
 import { listener, listenerCtx } from '@milkdown/plugin-listener';
 
-let markdown = ""
+let props = defineProps<{
+  content: string
+}>()
+
+let emit = defineEmits<{
+  (e: 'update:content', content: string): void
+}>()
+
+const content = ref('')
+
+watch(content, () => {
+  emit('update:content', content.value)
+})
+
+
 const editor = useEditor((root) =>
   Editor.make()
     .config((ctx) => {
       ctx.set(rootCtx, root);
       ctx.set(listenerCtx, {
-        // SBYZB
         markdown: [(get) => {
-          markdown = get()
-          console.log(markdown)
+          content.value = get()
         }],
       });
     })
@@ -46,18 +59,6 @@ const editor = useEditor((root) =>
     )
 );
 </script>
-
-
-<!--<script lang="ts">-->
-<!--// SBYZB-->
-<!--export default {-->
-<!--  data() {-->
-<!--    return {-->
-<!--      md_content: markdown,-->
-<!--    }-->
-<!--  }-->
-<!--}-->
-<!--</script>-->
 
 <template>
   <VueEditor :editor="editor" />
