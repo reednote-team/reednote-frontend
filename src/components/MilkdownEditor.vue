@@ -16,7 +16,7 @@ import { indent, indentPlugin } from '@milkdown/plugin-indent';
 import { listener, listenerCtx } from '@milkdown/plugin-listener';
 
 let props = defineProps<{
-  content: string
+  content: string,
 }>()
 
 let emit = defineEmits<{
@@ -26,7 +26,8 @@ let emit = defineEmits<{
 const editor = useEditor((root) =>
   Editor.make()
     .config((ctx) => {
-      ctx.set(rootCtx, root);
+      ctx.set(rootCtx, root)
+      ctx.set(defaultValueCtx, props.content)
       ctx.set(listenerCtx, {
         markdown: [(get) => {
           emit('update:content', get())
