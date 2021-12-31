@@ -11,6 +11,7 @@ import { slash } from "@milkdown/plugin-slash";
 import { emoji } from "@milkdown/plugin-emoji";
 import { tooltip } from "@milkdown/plugin-tooltip";
 import { upload } from "@milkdown/plugin-upload"
+import { prism } from "@milkdown/plugin-prism"
 import { indent, indentPlugin } from '@milkdown/plugin-indent';
 import { listener, listenerCtx } from '@milkdown/plugin-listener';
 
@@ -44,6 +45,7 @@ const editor = useEditor((root) =>
     .use(emoji)
     .use(tooltip)
     .use(upload)
+    .use(prism)
     .use(
       indent.configure(indentPlugin, {
         type: 'space',
