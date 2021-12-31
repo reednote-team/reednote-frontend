@@ -1,8 +1,19 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import MilkdownEditorVue from './components/MilkdownEditor.vue';
+import LoadSaveVue from './components/LoadSave.vue';
+
+const fileBuffer = reactive({
+  content: '', 
+  error: ''
+})
 
 const content = ref('')
+
+watch(fileBuffer, () => {
+  content.value = fileBuffer.content
+  console.log(content.value)
+})
 
 watch(content, () => {
   console.log(content.value);
@@ -12,6 +23,7 @@ watch(content, () => {
 
 <template>
   <div class="container">
+    <LoadSaveVue :getter="fileBuffer" />
     <MilkdownEditorVue v-model:content="content" />
   </div>
 </template>

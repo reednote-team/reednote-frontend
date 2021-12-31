@@ -23,21 +23,14 @@ let emit = defineEmits<{
   (e: 'update:content', content: string): void
 }>()
 
-const content = ref('')
-
-watch(content, () => {
-  emit('update:content', content.value)
-})
-
-
 const editor = useEditor((root) =>
   Editor.make()
     .config((ctx) => {
       ctx.set(rootCtx, root);
       ctx.set(listenerCtx, {
         markdown: [(get) => {
-          content.value = get()
-        }],
+          emit('update:content', get())
+        }]
       });
     })
     .use(nord)
