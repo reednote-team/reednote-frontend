@@ -1,5 +1,4 @@
 <script setup lang='ts'>
-import { ref, watch } from "vue";
 import { Editor, rootCtx, defaultValueCtx } from "@milkdown/core";
 import { nord } from "@milkdown/theme-nord";
 import { VueEditor, useEditor } from "@milkdown/vue";
