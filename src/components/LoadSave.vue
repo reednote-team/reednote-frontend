@@ -57,7 +57,7 @@ const SaveTextToFile = () => {
 <template>
   <div>
     <input type="file" @change="loadTextFromFile" />
-    <input type="button" value="保存" @click="SaveTextToFile" />
+    <input type="button" value="Save" @click="SaveTextToFile" />
   </div>
 </template>
 
