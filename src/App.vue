@@ -3,7 +3,7 @@ import { reactive, ref, watch } from 'vue';
 import MilkdownEditorVue from './components/MilkdownEditor.vue';
 import LoadSaveVue from './components/LoadSave.vue';
 
-const editor = ref('')
+const editor = ref('init')
 const content = ref('')
 
 const fileBuffer = reactive({
@@ -16,7 +16,6 @@ watch(fileBuffer, () => {
   if (fileBuffer.status == 'loaded') {
     content.value = fileBuffer.content
     editor.value = 'opened'
-    console.log(content.value)
   }
   else if (fileBuffer.status == 'loading') {
     editor.value = ''
@@ -24,7 +23,7 @@ watch(fileBuffer, () => {
 })
 
 watch(content, () => {
-  console.log(content.value);
+  fileBuffer.content = content.value
 })
 
 </script>
