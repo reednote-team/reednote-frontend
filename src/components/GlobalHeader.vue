@@ -79,7 +79,7 @@ let items: IItem[] = [
     name: 'download',
     disabled: false,
     action: () => {
-      let text = store.state.content
+      let text = store.state.currentNote.content
       let blob = new Blob([text], { type: 'text/plain' })
       let link = document.createElement("a")
       link.download = filename.value
