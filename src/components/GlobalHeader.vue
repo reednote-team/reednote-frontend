@@ -27,11 +27,15 @@ let items: IItem[] = [
     disabled: false,
     action: () => {
       emitter.emit('call-modal', {
+        type: 'comfirm',
         message: 'all content have not been saved will lost if you press confirm.',
         onModalConfirm: () => {
+          router.push('/notes/new')
           filename.value = 'untitled.md'
           store.commit('updateStatus', 'loading')
           store.commit('updateContent', '')
+          store.commit('updateCurrentNoteName', filename.value)
+          store.commit('updateCurrentNoteId', '')
           setTimeout(() => {
             store.commit('updateStatus', 'loaded')
           }, 10)
@@ -47,12 +51,13 @@ let items: IItem[] = [
     disabled: false,
     action: () => {
       emitter.emit('call-modal', {
+        type: 'comfirm',
         message: 'all content have not been saved may lost if you press confirm.',
         onModalConfirm: () => {
           router.push('/notes')
         }
       })
-      
+
     }
   },
   {
@@ -60,9 +65,11 @@ let items: IItem[] = [
     disabled: false,
     action: () => {
       emitter.emit('call-modal', {
-        title: 'test',
-        message: 'saved',
-        onModalConfirm: () => {}
+        title: 'Save as',
+        type: 'filenameInput',
+        onModalConfirm: () => {
+          store.dispatch('saveNote')
+        }
       })
     }
   },
@@ -91,7 +98,24 @@ let items: IItem[] = [
         window.URL.revokeObjectURL(link.href)
       }, 100);
     }
-  }
+  },
+  {
+    name: 'delete',
+    disabled: store.state.currentNote.id != '',
+    action: () => {
+      emitter.emit('call-modal', {
+        type: 'comfirm',
+        message: 'Do you really want to delete this note?',
+        onModalConfirm: () => {
+          store.dispatch('deleteNote', store.state.currentNote.id)
+          router.push(`/notes`)
+        },
+        onModalCancel: () => {
+          return;
+        }
+      })
+    }
+  },
 ]
 
 </script>

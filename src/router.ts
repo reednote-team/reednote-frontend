@@ -12,11 +12,15 @@ export default createRouter({
   routes: [
     {
       path: '/',
-      component: NoteCreate
+      component: NoteList
     }, 
     {
       path: '/notes',
       component: NoteList
+    },
+    {
+      path: '/notes/new',
+      component: NoteCreate
     },
     {
       path: '/notes/:id',

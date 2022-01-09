@@ -33,7 +33,7 @@ export default createStore<IState>({
     },
     currentNote: {
       id: '', 
-      name: '',
+      name: 'untitled.md',
       content: ''
     },
     noteList: {
@@ -44,6 +44,12 @@ export default createStore<IState>({
   mutations: {
     updateNoteList(state, noteList: NoteList) {
       state.noteList = noteList
+    },
+    updateCurrentNoteName(state, name) {
+      state.currentNote.name = name
+    },
+    updateCurrentNoteId(state, id) {
+      state.currentNote.id = id
     },
     updateContent(state, content: string) {
       state.currentNote.content = content
@@ -59,20 +65,42 @@ export default createStore<IState>({
         store.commit('updateNoteList', notes)
       })
     },
+    saveNote(store) {
+      const note = store.state.currentNote
+      if (note.id) {
+        axios.put(`/notes/${note.id}`, note).then((resp) => {
+          console.log(resp)
+        })
+      }
+      else {
+        axios.post('/notes', note).then((resp) => {
+          console.log(resp)
+        })
+      }
+    },
+    deleteNote(store, id) {
+      axios.delete(`/notes/${id}`).then((resp) => {
+        console.log(resp)
+      })
+    },
     updateContentFromServer(store, id) {
       store.commit('updateStatus', 'loading')
       axios.get(`/notes/${id}`).then((resp) => {
         const note: CurrentNote = JSON.parse(resp.data)
         store.commit('updateContent', note.content)
+        store.commit('updateCurrentNoteName', note.name)
+        store.commit('updateCurrentNoteId', note.id)
         store.commit('updateStatus', 'loaded')
       })
     },
-    updateContentFromFile(store, file) {
+    updateContentFromFile(store, file: File) {
       store.commit('updateStatus', 'loading')
       const reader = new FileReader()
       reader.readAsText(file)
       reader.onload = () => {
         store.commit('updateContent', reader.result as string)
+        store.commit('updateCurrentNoteName', file.name)
+        store.commit('updateCurrentNoteId', '')
         store.commit('updateStatus', 'loaded')
       }
     },

@@ -4,6 +4,7 @@ import mitt from 'mitt'
 type Modal = {
   title?: string,
   message?: string,
+  type: 'comfirm' | 'filenameInput',
   onModalConfirm: () => void,
   onModalCancel?: () => void
 }
@@ -16,11 +17,19 @@ export const emitter = mitt<Events>()
 </script>
 
 <script setup lang='ts'>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { useStore } from 'vuex'
+import { IState } from '../store'
+
+const store = useStore<IState>()
 
 const status = ref<'show' | 'hide'>('hide')
 const title = ref('Attention!')
 const message = ref('please confirm.')
+const filename = computed(() => {
+  return store.state.currentNote.name
+})
+const type = ref<'comfirm' | 'filenameInput'>('comfirm')
 const modalConfirmAction = ref(() => { })
 const modalCancelAction = ref(() => { })
 
@@ -28,6 +37,7 @@ const modalCloseAction = () => {
   status.value = 'hide'
   title.value = 'Attention!'
   message.value = 'please confirm.'
+  type.value = 'comfirm'
   modalConfirmAction.value = () => { }
   modalCancelAction.value = () => { }
 }
@@ -37,6 +47,8 @@ emitter.on('call-modal', (modal) => {
     title.value = modal.title
   if (modal.message)
     message.value = modal.message
+  if (modal.type)
+    type.value = modal.type
   modalConfirmAction.value = modal.onModalConfirm
   if (modal.onModalCancel)
     modalCancelAction.value = modal.onModalCancel
@@ -75,20 +87,27 @@ emitter.on('call-modal', (modal) => {
               </svg>
             </button>
           </div>
-          <div class="p-6 space-y-4">
-            <p
-              class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
-            >{{ message }}</p>
+          <div v-if="type == 'comfirm'" class="p-6 space-y-4">
+            <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">{{ message }}</p>
+          </div>
+          <div v-if="type == 'filenameInput'" class="p-6 space-y-4">
+            <div class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+              <input
+                :value="filename"
+                @change="store.commit('updateCurrentNoteName', ($event.target as HTMLInputElement).value)"
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-100 bg-transparent leading-tight focus:outline-none focus:border-cyan-500"
+              />
+            </div>
           </div>
           <div
             class="mx-auto flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600 w-fit"
           >
             <button
-              @click="modalConfirmAction();modalCloseAction()"
+              @click="modalConfirmAction(); modalCloseAction()"
               class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >Confirm</button>
             <button
-              @click="modalCancelAction();modalCloseAction()"
+              @click="modalCancelAction(); modalCloseAction()"
               class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600"
             >Cancel</button>
           </div>
