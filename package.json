@@ -1,0 +1,43 @@
+{
+  "name": "reednote-k-frontend",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@milkdown/core": "^5.3.0",
+    "@milkdown/plugin-clipboard": "^5.3.0",
+    "@milkdown/plugin-cursor": "^5.3.0",
+    "@milkdown/plugin-emoji": "^5.3.0",
+    "@milkdown/plugin-history": "^5.3.0",
+    "@milkdown/plugin-indent": "^5.3.0",
+    "@milkdown/plugin-listener": "^5.3.0",
+    "@milkdown/plugin-math": "^5.3.0",
+    "@milkdown/plugin-prism": "^5.3.1",
+    "@milkdown/plugin-slash": "^5.3.0",
+    "@milkdown/plugin-tooltip": "^5.3.0",
+    "@milkdown/plugin-upload": "^5.3.0",
+    "@milkdown/preset-commonmark": "^5.3.0",
+    "@milkdown/preset-gfm": "^5.3.0",
+    "@milkdown/theme-nord": "^5.3.0",
+    "@milkdown/vue": "^5.3.0",
+    "axios": "^0.24.0",
+    "material-icons": "^1.10.4",
+    "mitt": "^3.0.0",
+    "prismjs": "^1.26.0",
+    "vue": "^3.2.25",
+    "vue-router": "^4.0.12",
+    "vuex": "^4.0.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^2.0.0",
+    "autoprefixer": "^10.4.1",
+    "postcss": "^8.4.5",
+    "tailwindcss": "^3.0.11",
+    "typescript": "^4.4.4",
+    "vite": "^2.7.2",
+    "vue-tsc": "^0.29.8"
+  }
+}
