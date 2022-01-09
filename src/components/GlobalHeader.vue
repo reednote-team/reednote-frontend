@@ -1,22 +1,33 @@
 <script setup lang='ts'>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import DropdownMenuVue, { IItem } from './DropdownMenu.vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { IState } from '../store'
 import Modal, { emitter } from './Modal.vue'
 
 const router = useRouter()
+const route = useRoute()
 const store = useStore<IState>()
-const filename = ref('untitled.md')
+const id = computed(() => {
+  return store.state.currentNote.id
+})
+const name = computed(() => {
+  return store.state.currentNote.name
+})
+const content = computed(() => {
+  return store.state.currentNote.content
+})
+
+// const filename = ref('untitled.md')
 const fileSelector = ref<HTMLElement | null>(null)
 
 const loadTextFromFile = (e: Event) => {
   const target = e.target as HTMLInputElement
   if (target.files?.length) {
     const file = target.files[0]
-    filename.value = file.name
-    store.dispatch('updateContentFromFile', file)
+    // filename.value = file.name
+    store.dispatch('updateCurrentNoteContentFromFile', file)
   }
   target.value = ''
 }
@@ -24,21 +35,14 @@ const loadTextFromFile = (e: Event) => {
 let items: IItem[] = [
   {
     name: 'new',
-    disabled: false,
+    disabled: ref(false),
     action: () => {
       emitter.emit('call-modal', {
         type: 'comfirm',
         message: 'all content have not been saved will lost if you press confirm.',
         onModalConfirm: () => {
           router.push('/notes/new')
-          filename.value = 'untitled.md'
-          store.commit('updateStatus', 'loading')
-          store.commit('updateContent', '')
-          store.commit('updateCurrentNoteName', filename.value)
-          store.commit('updateCurrentNoteId', '')
-          setTimeout(() => {
-            store.commit('updateStatus', 'loaded')
-          }, 10)
+          // filename.value = 'untitled.md'
         },
         onModalCancel: () => {
           return;
@@ -48,7 +52,9 @@ let items: IItem[] = [
   },
   {
     name: 'load',
-    disabled: false,
+    disabled: computed(() => {
+      return route.path == '/' || route.path == '/notes'
+    }),
     action: () => {
       emitter.emit('call-modal', {
         type: 'comfirm',
@@ -57,12 +63,13 @@ let items: IItem[] = [
           router.push('/notes')
         }
       })
-
     }
   },
   {
     name: 'save',
-    disabled: false,
+    disabled: computed(() => {
+      return content.value == ''
+    }),
     action: () => {
       emitter.emit('call-modal', {
         title: 'Save as',
@@ -75,21 +82,26 @@ let items: IItem[] = [
   },
   {
     name: 'upload',
-    disabled: false,
+    disabled: computed(() => {
+      return false
+    }),
     action: () => {
       if (fileSelector.value) {
+        router.push('/notes/new')
         fileSelector.value.click()
       }
     }
   },
   {
     name: 'download',
-    disabled: false,
+    disabled: computed(() => {
+      return content.value == ''
+    }),
     action: () => {
       let text = store.state.currentNote.content
       let blob = new Blob([text], { type: 'text/plain' })
       let link = document.createElement("a")
-      link.download = filename.value
+      link.download = name.value
       link.href = window.URL.createObjectURL(blob)
       document.body.appendChild(link)
       link.click()
@@ -101,13 +113,15 @@ let items: IItem[] = [
   },
   {
     name: 'delete',
-    disabled: store.state.currentNote.id != '',
+    disabled: computed(() => {
+      return id.value == ''
+    }),
     action: () => {
       emitter.emit('call-modal', {
         type: 'comfirm',
         message: 'Do you really want to delete this note?',
         onModalConfirm: () => {
-          store.dispatch('deleteNote', store.state.currentNote.id)
+          store.dispatch('deleteNote', id.value)
           router.push(`/notes`)
         },
         onModalCancel: () => {

@@ -5,6 +5,9 @@ import { IState } from '../store'
 import { computed } from 'vue';
 
 const store = useStore<IState>()
+store.commit('updateCurrentNoteContent', '')
+store.commit('updateCurrentNoteName', 'untitled.md')
+store.commit('updateCurrentNoteId', '')
 store.dispatch('fetchNoteList')
 
 const noteList = computed(() => {

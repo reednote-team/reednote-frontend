@@ -30,7 +30,7 @@ const editor = useEditor((root) =>
       ctx.set(defaultValueCtx, content.value)
       ctx.set(listenerCtx, {
         markdown: [(get) => {
-          store.commit('updateContent', get())
+          store.commit('updateCurrentNoteContent', get())
         }]
       });
     })

@@ -8,7 +8,7 @@ import { IState } from '../store'
 const store = useStore<IState>()
 
 const route = useRoute()
-store.dispatch('updateContentFromServer', route.params.id)
+store.dispatch('updateCurrentNoteContentFromServer', route.params.id)
 
 const editorStatus = computed(() => {
   return store.state.status

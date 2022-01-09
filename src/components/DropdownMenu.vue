@@ -1,10 +1,10 @@
 <script setup lang='ts'>
-import { ref, watch } from 'vue'
+import { ref, Ref, watch } from 'vue'
 import useClickOutside from '../hooks/useClickOutside'
 
 export interface IItem {
   name: string,
-  disabled: boolean,
+  disabled: Ref<boolean>,
   action: () => void
 }
 
@@ -53,12 +53,10 @@ watch(isClickOutside, () => {
       :class="{ hidden: !show }"
     >
       <ul class="py-1">
-        <li v-for="item in items">
+        <li v-for="item in items.filter((item) => item.disabled.value == false)">
           <a
-            href="#"
-            @click.prevent="!item.disabled && item.action()"
+            @click.prevent="item.action()"
             class="block py-2 px-4 text-sm bg-gray-500 dark:bg-gray-700 hover:bg-gray-600 dark:hover:bg-gray-500"
-            :class="{disabled: item.disabled}"
           >{{ item.name }}</a>
         </li>
       </ul>
