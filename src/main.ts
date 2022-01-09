@@ -5,7 +5,7 @@ import router from './router'
 import axios from 'axios'
 import prism from 'prismjs'
 import './index.css'
-import 'prismjs/themes/prism-material-light.css'
+import 'prismjs/themes/prism.min.css'
 import 'material-icons'
 
 axios.defaults.baseURL = 'http://127.0.0.1:8000/api'
