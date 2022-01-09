@@ -98,7 +98,7 @@ let items: IItem[] = [
 
 <template>
   <div class="bg-gray-400 dark:bg-gray-900 h-16 space-x-2 px-2 mb-4">
-    <a class="mx-3 mt-5 text-gray-100 text-xl font-bold float-left">Reednote</a>
+    <router-link to="/" class="mx-3 mt-5 text-gray-100 text-xl font-bold float-left">Reednote</router-link>
     <Modal />
     <div class="h-full py-5 float-right space-x-1">
       <div v-if="true">
