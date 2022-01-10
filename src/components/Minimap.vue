@@ -34,11 +34,11 @@ const minimap = computed(() => {
         if (codeLine[c][0] <= i && i <= codeLine[c][1]) isCodeLine = true
       }
       if (j == 0 && line[j] == '#' && !isCodeLine) isHeader = true
-      if (line[j] == '#' && isHeader) headerCount += 1
+      if (line[j] == '#' && line[j - 1 < 0 ? 0 : j - 1] == '#' && isHeader) headerCount += 1
       console.log(codeLine, j, isCodeLine)
       codeLine = []
     }
-    if (headerCount) ret.push({ headerCount: headerCount, header: markdown[i].replaceAll('#', '').trim() })
+    if (headerCount) ret.push({ headerCount: headerCount, header: markdown[i].replaceAll('#', '').trim().replaceAll('&#x20;', '').replaceAll('&x20;', '') })
   }
   return ret
 })
