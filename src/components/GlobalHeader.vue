@@ -19,14 +19,12 @@ const content = computed(() => {
   return store.state.currentNote.content
 })
 
-// const filename = ref('untitled.md')
 const fileSelector = ref<HTMLElement | null>(null)
 
 const loadTextFromFile = (e: Event) => {
   const target = e.target as HTMLInputElement
   if (target.files?.length) {
     const file = target.files[0]
-    // filename.value = file.name
     store.dispatch('updateCurrentNoteContentFromFile', file)
   }
   target.value = ''
@@ -42,7 +40,6 @@ let items: IItem[] = [
         message: 'all content have not been saved will lost if you press confirm.',
         onModalConfirm: () => {
           router.push('/notes/new')
-          // filename.value = 'untitled.md'
         },
         onModalCancel: () => {
           return;
