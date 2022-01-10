@@ -30,38 +30,45 @@ const loadTextFromFile = (e: Event) => {
   target.value = ''
 }
 
+const onJump = () => {
+  emitter.emit('call-modal', {
+    type: 'comfirm',
+    message: 'all content have not been saved may lost if you press confirm.',
+    onModalConfirm: () => {
+      router.push('/notes')
+    }
+  })
+}
+
 let items: IItem[] = [
   {
     name: 'new',
     disabled: ref(false),
     action: () => {
-      emitter.emit('call-modal', {
-        type: 'comfirm',
-        message: 'all content have not been saved will lost if you press confirm.',
-        onModalConfirm: () => {
-          router.push('/notes/new')
-        },
-        onModalCancel: () => {
-          return;
-        }
-      })
+      if (route.path == '/' || route.path == '/notes') {
+        router.push('/notes/new')
+      }
+      else if (content.value != '' && id.value != '') {
+        emitter.emit('call-modal', {
+          type: 'comfirm',
+          message: 'all content have not been saved will lost if you press confirm.',
+          onModalConfirm: () => {
+            router.push('/notes/new')
+          },
+          onModalCancel: () => {
+            return;
+          }
+        })
+      }
     }
   },
-  {
-    name: 'load',
-    disabled: computed(() => {
-      return route.path == '/' || route.path == '/notes'
-    }),
-    action: () => {
-      emitter.emit('call-modal', {
-        type: 'comfirm',
-        message: 'all content have not been saved may lost if you press confirm.',
-        onModalConfirm: () => {
-          router.push('/notes')
-        }
-      })
-    }
-  },
+  // {
+  //   name: 'load',
+  //   disabled: computed(() => {
+  //     return route.path == '/' || route.path == '/notes'
+  //   }),
+
+  // },
   {
     name: 'save',
     disabled: computed(() => {
@@ -133,7 +140,8 @@ let items: IItem[] = [
 
 <template>
   <div class="bg-gray-400 dark:bg-gray-900 h-16 space-x-2 px-2 mb-4">
-    <router-link to="/" class="mx-3 mt-5 text-gray-100 text-xl font-bold float-left">Reednote</router-link>
+    <a @click.prevent="onJump" class="mx-3 mt-5 text-gray-100 text-xl font-bold float-left">Reednote</a>
+    <span class="mx-3 mt-5 text-gray-100 text-xl font-bold float-left">/{{ name }}</span>
     <Modal />
     <div class="h-full py-5 float-right space-x-1">
       <div v-if="true">
