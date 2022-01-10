@@ -17,6 +17,7 @@ const editorStatus = computed(() => {
 </script>
 
 <template>
+  <Minimap></Minimap>
   <MarkdownEditor v-if="editorStatus == 'loaded'" />
 </template>
 

@@ -1,63 +1,76 @@
 <script setup lang='ts'>
-import { computed } from 'vue';
+import { computed, watch, reactive } from 'vue';
 import { useStore } from 'vuex'
 import { IState } from '../store'
 
 const store = useStore<IState>()
+const isCodeBlock = /^```.+\n+```/
+const isHeader = /^#+ /
 
 const content = computed(() => {
   return store.state.currentNote.content
 })
 
+interface Header {
+  type: number,
+  text: string,
+  hid: string
+}
 
-const minimap = computed(() => {
-  let ret = []
-  let markdown = content.value.split('\n')
-  let codeLine = []
-  for (let i = 0; i < markdown.length; i++) {
-    let line = markdown[i]
-    let headerCount = 0
-    let isHeader = false
-    for (let j = 0; j < line.length; j++) {
-      let startLine = -1
-      let endLine = 0;
-      for (let l = 0; l < markdown.length; l++) {
-        if (markdown[l].includes('```') && startLine == -1) startLine = l;
-        else if (markdown[l].includes('```')) {
-          endLine = l;
-          codeLine.push([startLine, endLine])
-          startLine = -1;
-        }
+
+// const headers = computed((): Header[] => {
+//   const content = store.state.currentNote.content.replace(isCodeBlock, '').split('\n')
+//   const headerLines = content.filter((line) => {
+//     return isHeader.test(line)
+//   })
+//   return headerLines.map((line): Header => {
+//     return {
+//       type: line.split(' ')[0].length,
+//       text: line.replace(isHeader, '')
+//     }
+//   })
+// })
+
+const headers = reactive<Header[]>([])
+
+watch(content, () => {
+  headers.length = 0
+  const editorRef = document.querySelector('.editor')
+  if (editorRef) {
+    const nodes = editorRef.childNodes
+    nodes?.forEach((el, index) => {
+      const hel = el as HTMLElement
+      if (hel.tagName.indexOf('H') >= 0) {
+        hel.id = `hid${index}`
+        headers.push({
+          text: hel.innerText,
+          type: parseInt(hel.tagName.replace('H', '')),
+          hid: `hid${index}`
+        })
       }
-      let isCodeLine = false;
-      for (let c = 0; c < codeLine.length; c++) {
-        if (codeLine[c][0] <= i && i <= codeLine[c][1]) isCodeLine = true
-      }
-      if (j == 0 && line[j] == '#' && !isCodeLine) isHeader = true
-      if (line[j] == '#' && line[j - 1 < 0 ? 0 : j - 1] == '#' && isHeader) headerCount += 1
-      console.log(codeLine, j, isCodeLine)
-      codeLine = []
-    }
-    if (headerCount) ret.push({ headerCount: headerCount, header: markdown[i].replaceAll('#', '').trim().replaceAll('&#x20;', '').replaceAll('&x20;', '') })
+    })
   }
-  return ret
+  console.log(headers);
 })
 
 </script>
 
 <template>
-  <ul>
-    <li v-for="h in minimap">
-      {{ h.headerCount }}-{{ h.header }}
-    </li>
-  </ul>
+  <div>
+    <a
+      v-for="header in headers"
+      :href="`#${header.hid}`"
+      class="block dark:text-white ml-4"
+      :style="`padding-left: ${header.type * 16}px; font-size: ${(9 - header.type) * 3}px;`"
+    >{{ header.text }}</a>
+  </div>
 </template>
 
 <style scoped>
-.header1 {
-
+/* .header1 {
+  padding-left: ;
 }
 .header2 {
-
-}
+  padding-left: ;
+} */
 </style>

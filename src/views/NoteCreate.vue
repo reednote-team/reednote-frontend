@@ -21,8 +21,9 @@ const editorStatus = computed(() => {
 </script>
 
 <template>
-  <MarkdownEditor v-if="editorStatus == 'loaded'" />
   <Minimap></Minimap>
+  <MarkdownEditor v-if="editorStatus == 'loaded'" />
+
 </template>
 
 <style scoped>
