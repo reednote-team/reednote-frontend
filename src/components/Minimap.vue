@@ -3,13 +3,13 @@ import { computed, watch, reactive } from 'vue';
 import { useStore } from 'vuex'
 import { IState } from '../store'
 
-// const store = useStore<IState>()
+const store = useStore<IState>()
 // const isCodeBlock = /^```.+\n+```/
 // const isHeader = /^#+ /
 
-// const content = computed(() => {
-//   return store.state.currentNote.content
-// })
+const content = computed(() => {
+  return store.state.currentNote.content
+})
 
 interface Header {
   type: number,
