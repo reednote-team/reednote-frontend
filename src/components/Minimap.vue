@@ -13,15 +13,32 @@ const content = computed(() => {
 const minimap = computed(() => {
   let ret = []
   let markdown = content.value.split('\n')
+  let codeLine = []
   for (let i = 0; i < markdown.length; i++) {
     let line = markdown[i]
     let headerCount = 0
     let isHeader = false
     for (let j = 0; j < line.length; j++) {
-      if (j == 0 && line[j] == '#') isHeader = true
+      let startLine = -1
+      let endLine = 0;
+      for (let l = 0; l < markdown.length; l++) {
+        if (markdown[l].includes('```') && startLine == -1) startLine = l;
+        else if (markdown[l].includes('```')) {
+          endLine = l;
+          codeLine.push([startLine, endLine])
+          startLine = -1;
+        }
+      }
+      let isCodeLine = false;
+      for (let c = 0; c < codeLine.length; c++) {
+        if (codeLine[c][0] <= j && j <= codeLine[c][1]) isCodeLine = true
+      }
+      if (j == 0 && line[j] == '#' && !isCodeLine) isHeader = true
       if (line[j] == '#' && isHeader) headerCount += 1
+      console.log(codeLine, j, isCodeLine)
+      codeLine = []
     }
-    if (headerCount) ret.push({headerCount: headerCount, header: markdown[i]})
+    if (headerCount) ret.push({ headerCount: headerCount, header: markdown[i].replaceAll('#', '').trim() })
   }
   return ret
 })
@@ -30,9 +47,17 @@ const minimap = computed(() => {
 
 <template>
   <ul>
-    <li v-for="h in minimap">{{ h.header }}</li>
+    <li v-for="h in minimap">
+      {{ h.headerCount }}-{{ h.header }}
+    </li>
   </ul>
 </template>
 
 <style scoped>
+.header1 {
+
+}
+.header2 {
+
+}
 </style>
