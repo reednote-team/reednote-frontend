@@ -31,7 +31,7 @@ const minimap = computed(() => {
       }
       let isCodeLine = false;
       for (let c = 0; c < codeLine.length; c++) {
-        if (codeLine[c][0] <= j && j <= codeLine[c][1]) isCodeLine = true
+        if (codeLine[c][0] <= i && i <= codeLine[c][1]) isCodeLine = true
       }
       if (j == 0 && line[j] == '#' && !isCodeLine) isHeader = true
       if (line[j] == '#' && isHeader) headerCount += 1
