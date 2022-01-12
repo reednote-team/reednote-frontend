@@ -62,13 +62,6 @@ let items: IItem[] = [
       }
     }
   },
-  // {
-  //   name: 'load',
-  //   disabled: computed(() => {
-  //     return route.path == '/' || route.path == '/notes'
-  //   }),
-
-  // },
   {
     name: 'save',
     disabled: computed(() => {
@@ -139,9 +132,9 @@ let items: IItem[] = [
 </script>
 
 <template>
-  <div class="bg-gray-400 dark:bg-gray-900 h-16 space-x-2 px-2 mb-4">
-    <a @click.prevent="onJump" class="mx-3 mt-5 text-gray-100 text-xl font-bold float-left">Reednote</a>
-    <span class="mx-3 mt-5 text-gray-100 text-xl font-bold float-left">/{{ name }}</span>
+  <div class="bg-gray-400 dark:bg-gray-900 h-16 space-x-1 px-2">
+    <a @click.prevent="onJump" class="mx-3 mt-5 text-gray-100 text-xl font-bold float-left hidden md:block">Reednote</a>
+    <span class="mt-5 text-gray-200 bg-gray-700 p-1 rounded-md text-sm font-bold max-w-sm float-left">/{{ name }}</span>
     <Modal />
     <div class="h-full py-5 float-right space-x-1">
       <div v-if="true">

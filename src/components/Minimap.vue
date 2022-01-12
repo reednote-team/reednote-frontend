@@ -1,76 +1,39 @@
 <script setup lang='ts'>
-import { computed, watch, reactive } from 'vue';
-import { useStore } from 'vuex'
-import { IState } from '../store'
+import { onMounted, onUnmounted } from 'vue';
+import { headings, emitter } from '../plugins/myHeadings'
 
-const store = useStore<IState>()
-// const isCodeBlock = /^```.+\n+```/
-// const isHeader = /^#+ /
-
-const content = computed(() => {
-  return store.state.currentNote.content
-})
-
-interface Header {
-  type: number,
-  text: string,
-  hid: string
+const updateTOC = (e: Event) => {
+  const key = (e as KeyboardEvent).key
+  const triggers: string[] = ['Enter', 'Backspace']
+  if (triggers.indexOf(key) >= 0)
+    emitter.emit('update-toc')
 }
 
+onMounted(() => {
+  window.addEventListener('keyup', updateTOC)
+})
 
-// const headers = computed((): Header[] => {
-//   const content = store.state.currentNote.content.replace(isCodeBlock, '').split('\n')
-//   const headerLines = content.filter((line) => {
-//     return isHeader.test(line)
-//   })
-//   return headerLines.map((line): Header => {
-//     return {
-//       type: line.split(' ')[0].length,
-//       text: line.replace(isHeader, '')
-//     }
-//   })
-// })
-
-const headers = reactive<Header[]>([])
-
-watch(content, () => {
-  headers.length = 0
-  const editorRef = document.querySelector('.editor')
-  if (editorRef) {
-    const nodes = editorRef.childNodes
-    nodes?.forEach((el, index) => {
-      const hel = el as HTMLElement
-      if (hel.tagName.indexOf('H') >= 0) {
-        hel.id = `hid${index}`
-        headers.push({
-          text: hel.innerText,
-          type: parseInt(hel.tagName.replace('H', '')),
-          hid: `hid${index}`
-        })
-      }
-    })
-  }
-  console.log(headers);
+onUnmounted(() => {
+  window.removeEventListener('keyup', updateTOC)
 })
 
 </script>
 
 <template>
-  <div>
-    <a
-      v-for="header in headers"
-      :href="`#${header.hid}`"
-      class="block dark:text-white ml-4"
-      :style="`padding-left: ${header.type * 16}px; font-size: ${(9 - header.type) * 3}px;`"
-    >{{ header.text }}</a>
+  <div class="h-full w-full hidden lg:block">
+    <div
+      class="min-h-screen h-full pt-4 w-full text-gray-700 bg-white dark:text-gray-200 dark:bg-gray-900"
+    >
+      <a
+        v-for="heading in headings"
+        :href="`#${heading.hid}`"
+        class="block mx-4 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
+        :class="`text-gray-${heading.type > 4 ? 3 : heading.type}00`"
+        :style="`padding-left: ${heading.type * 8}px; font-size: ${heading.type > 3 ? 12 : 4 + (6 - heading.type) * 3}px;`"
+      >{{ heading.text }}</a>
+    </div>
   </div>
 </template>
 
 <style scoped>
-/* .header1 {
-  padding-left: ;
-}
-.header2 {
-  padding-left: ;
-} */
 </style>

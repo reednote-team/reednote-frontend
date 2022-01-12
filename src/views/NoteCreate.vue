@@ -3,7 +3,6 @@ import { computed } from 'vue';
 import MarkdownEditor from '../components/MarkdownEditor.vue';
 import { useStore } from 'vuex'
 import { IState } from '../store'
-import Minimap from '../components/Minimap.vue'
 
 const store = useStore<IState>()
 store.commit('updateStatus', 'loading')
@@ -21,9 +20,7 @@ const editorStatus = computed(() => {
 </script>
 
 <template>
-  <Minimap></Minimap>
   <MarkdownEditor v-if="editorStatus == 'loaded'" />
-
 </template>
 
 <style scoped>

@@ -14,9 +14,10 @@ import { upload } from "@milkdown/plugin-upload"
 import { prism } from "@milkdown/plugin-prism"
 import { indent, indentPlugin } from '@milkdown/plugin-indent'
 import { listener, listenerCtx } from '@milkdown/plugin-listener'
+import { myHeading } from "../plugins/myHeadings"
 import { useStore } from 'vuex'
 import { IState } from '../store'
-import { computed } from "vue";
+import { computed } from "vue"
 
 const store = useStore<IState>()
 const content = computed(() => {
@@ -52,6 +53,7 @@ const editor = useEditor((root) =>
         size: 4,
       }),
     )
+    .use(myHeading())
 );
 </script>
 
