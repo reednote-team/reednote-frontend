@@ -11,7 +11,7 @@ import Minimap from './components/Minimap.vue'
     </div>
     <div class="px-2 lg:col-span-5 col-span-full">
       <div
-        class="container relative my-4 mx-auto min-h-screen max-w-[21cm] bg-white dark:bg-[#2e3440] shadow shadow-gray-300 rounded overflow-hidden"
+        class="container relative mt-20 mb-8 mx-auto min-h-screen max-w-[21cm] bg-white dark:bg-[#2e3440] shadow shadow-gray-300 rounded overflow-hidden"
       >
         <router-view></router-view>
       </div>

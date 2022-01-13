@@ -20,9 +20,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="h-full w-full hidden lg:block">
+  <div class="fixed mt-16 w-64 hidden lg:block">
     <div
-      class="min-h-screen h-full pt-4 w-full text-gray-700 bg-white dark:text-gray-200 dark:bg-gray-900"
+      class="min-h-screen max-h-screen overflow-scroll scrollbar scrollbar-thin scrollbar-thumb-slate-700 pt-4 text-gray-700 bg-white dark:text-gray-200 dark:bg-gray-900"
     >
       <a
         v-for="heading in headings"
