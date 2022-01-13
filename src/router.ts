@@ -20,7 +20,7 @@ export default createRouter({
     },
     {
       path: '/notes/new',
-      component: NoteCreate
+      component: NoteDetail
     },
     {
       path: '/notes/:id',

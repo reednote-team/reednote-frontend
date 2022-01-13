@@ -48,17 +48,37 @@ let items: IItem[] = [
       if (route.path == '/' || route.path == '/notes') {
         router.push('/notes/new')
       }
-      else if (content.value != '' && id.value != '') {
-        emitter.emit('call-modal', {
-          type: 'comfirm',
-          message: 'all content have not been saved will lost if you press confirm.',
-          onModalConfirm: () => {
-            router.push('/notes/new')
-          },
-          onModalCancel: () => {
-            return;
-          }
-        })
+      else if (route.path == '/notes/new') {
+        if (content.value != '') {
+          emitter.emit('call-modal', {
+            type: 'comfirm',
+            message: 'all content have not been saved will lost if you press confirm.',
+            onModalConfirm: () => {
+              store.commit('updateStatus', 'loading')
+              store.commit('updateCurrentNoteContent', '')
+              store.commit('updateCurrentNoteName', 'untitled.md')
+              store.commit('updateCurrentNoteId', '')
+              setTimeout(() => {
+                store.commit('updateStatus', 'loaded')
+              }, 10)
+            },
+            onModalCancel: () => {
+              return;
+            }
+          })
+        }
+        else {
+          emitter.emit('call-modal', {
+            type: 'comfirm',
+            message: 'all content have not been saved will lost if you press confirm.',
+            onModalConfirm: () => {
+              router.push('/notes/new')
+            },
+            onModalCancel: () => {
+              return;
+            }
+          })
+        }
       }
     }
   },
@@ -133,8 +153,13 @@ let items: IItem[] = [
 
 <template>
   <div class="bg-gray-400 dark:bg-gray-900 h-16 space-x-1 px-2">
-    <a @click.prevent="onJump" class="mx-3 mt-5 text-gray-100 text-xl font-bold float-left hidden md:block">Reednote</a>
-    <span class="mt-5 text-gray-200 bg-gray-700 p-1 rounded-md text-sm font-bold max-w-sm float-left">/{{ name }}</span>
+    <a
+      @click.prevent="onJump"
+      class="mx-3 mt-5 text-gray-100 text-xl font-bold float-left hidden md:block"
+    >Reednote</a>
+    <span
+      class="mt-5 text-gray-200 bg-gray-700 p-1 rounded-md text-sm font-bold max-w-sm float-left"
+    >/{{ name }}</span>
     <Modal />
     <div class="h-full py-5 float-right space-x-1">
       <div v-if="true">

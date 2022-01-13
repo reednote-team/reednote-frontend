@@ -27,7 +27,7 @@ onUnmounted(() => {
       <a
         v-for="heading in headings"
         :href="`#${heading.hid}`"
-        class="block mx-4 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
+        class="block mx-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
         :class="`text-gray-${heading.type > 4 ? 3 : heading.type}00`"
         :style="`padding-left: ${heading.type * 8}px; font-size: ${heading.type > 3 ? 12 : 4 + (6 - heading.type) * 3}px;`"
       >{{ heading.text }}</a>
