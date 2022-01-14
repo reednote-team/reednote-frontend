@@ -1,10 +1,11 @@
 <script setup lang='ts'>
-import { computed, ref } from 'vue'
-import DropdownMenuVue, { IItem } from './DropdownMenu.vue'
+import { computed, ref, } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { IState } from '../store'
-import Modal, { emitter } from './Modal.vue'
+import { emitter } from './Modal.vue'
+import HerdaeButton from './HerdaeButton.vue'
+import HeaderDropdown, { IItem } from './HeaderDropdown.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -30,25 +31,12 @@ const loadTextFromFile = (e: Event) => {
   target.value = ''
 }
 
-const onJump = () => {
-  emitter.emit('call-modal', {
-    type: 'comfirm',
-    message: 'all content have not been saved may lost if you press confirm.',
-    onModalConfirm: () => {
-      router.push('/notes')
-    }
-  })
-}
-
-let items: IItem[] = [
+let dropdownItems: IItem[] = [
   {
     name: 'new',
     disabled: ref(false),
     action: () => {
-      if (route.path == '/' || route.path == '/notes') {
-        router.push('/notes/new')
-      }
-      else if (route.path == '/notes/new') {
+      if (route.path == '/notes/new') {
         if (content.value != '') {
           emitter.emit('call-modal', {
             type: 'comfirm',
@@ -80,6 +68,9 @@ let items: IItem[] = [
           })
         }
       }
+      else {
+        router.push('/notes/new')
+      }
     }
   },
   {
@@ -88,13 +79,17 @@ let items: IItem[] = [
       return content.value == ''
     }),
     action: () => {
-      emitter.emit('call-modal', {
-        title: 'Save as',
-        type: 'filenameInput',
-        onModalConfirm: () => {
-          store.dispatch('saveNote')
-        }
-      })
+      if (name.value == 'untitled.md')
+        emitter.emit('call-modal', {
+          title: 'Save as',
+          type: 'filenameInput',
+          onModalConfirm: () => {
+            store.dispatch('saveNote')
+          }
+        })
+      else {
+        store.dispatch('saveNote')
+      }
     }
   },
   {
@@ -103,9 +98,43 @@ let items: IItem[] = [
       return false
     }),
     action: () => {
-      if (fileSelector.value) {
-        router.push('/notes/new')
-        fileSelector.value.click()
+      if (route.path == '/notes/new') {
+        if (content.value != '') {
+          emitter.emit('call-modal', {
+            type: 'comfirm',
+            message: 'all content have not been saved will lost if you press confirm.',
+            onModalConfirm: () => {
+              if (fileSelector.value) {
+                router.push('/notes/new')
+                fileSelector.value.click()
+              }
+            },
+            onModalCancel: () => {
+              return;
+            }
+          })
+        }
+        else {
+          emitter.emit('call-modal', {
+            type: 'comfirm',
+            message: 'all content have not been saved will lost if you press confirm.',
+            onModalConfirm: () => {
+              if (fileSelector.value) {
+                router.push('/notes/new')
+                fileSelector.value.click()
+              }
+            },
+            onModalCancel: () => {
+              return;
+            }
+          })
+        }
+      }
+      else {
+        if (fileSelector.value) {
+          router.push('/notes/new')
+          fileSelector.value.click()
+        }
       }
     }
   },
@@ -149,34 +178,36 @@ let items: IItem[] = [
   },
 ]
 
+const showTOCButton = computed(() => {
+  return route.path == '/notes' || route.path == '/'
+})
+
 </script>
 
 <template>
-  <div class="fixed w-full z-10 bg-gray-400 dark:bg-gray-900 h-16 space-x-1 px-2">
-    <a
-      @click.prevent="onJump"
-      class="mx-3 mt-5 text-gray-100 text-xl font-bold float-left hidden md:block"
-    >Reednote</a>
-    <span
-      class="mt-5 text-gray-200 bg-gray-700 p-1 rounded-md text-sm font-bold max-w-sm float-left"
-    >/{{ name }}</span>
-    <Modal />
-    <div class="h-full py-5 float-right space-x-1">
-      <div v-if="true">
-        <DropdownMenuVue :title="'menu'" :items="items" />
-      </div>
-      <div v-else>
-        <a
-          class="px-4 py-3 text-lg text-white font-bold rounded-md hover:shadow-xl hover:bg-slate-800 focus:outline-none"
-        >登录</a>
-        <span class="text-white text-lg">|</span>
-        <a
-          class="px-4 py-3 text-lg text-white font-bold rounded-md hover:shadow-xl hover:bg-slate-800 focus:outline-none"
-        >注册</a>
-      </div>
-    </div>
-    <input type="file" @change="loadTextFromFile" ref="fileSelector" hidden />
+  <div v-if="true" class="flex space-x-2">
+    <HerdaeButton :disabled="showTOCButton">
+      <span class="material-icons-round">view_list</span>
+    </HerdaeButton>
+    <HeaderDropdown :items="dropdownItems">
+      <HerdaeButton :disabled="false">
+        <span class="material-icons-round">file_present</span>
+      </HerdaeButton>
+    </HeaderDropdown>
+    <HerdaeButton :disabled="false">
+      <span class="material-icons-round">account_circle</span>
+    </HerdaeButton>
   </div>
+  <div v-else>
+    <a
+      class="px-4 py-3 text-lg text-white font-bold rounded-md hover:shadow-xl hover:bg-slate-800 focus:outline-none"
+    >登录</a>
+    <span class="text-white text-lg">|</span>
+    <a
+      class="px-4 py-3 text-lg text-white font-bold rounded-md hover:shadow-xl hover:bg-slate-800 focus:outline-none"
+    >注册</a>
+  </div>
+  <input type="file" @change="loadTextFromFile" ref="fileSelector" hidden />
 </template>
 
 <style scoped>

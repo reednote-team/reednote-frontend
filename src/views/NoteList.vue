@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import Note from '../components/Note.vue';
+import Note from '../components/NoteCover.vue';
 import { useStore } from 'vuex'
 import { IState } from '../store'
 import { computed } from 'vue';

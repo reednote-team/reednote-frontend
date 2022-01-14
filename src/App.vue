@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import GlobalHeader from './components/GlobalHeader.vue';
+import GlobalHeader from './components/Header.vue';
 import Minimap from './components/Minimap.vue'
 </script>
 
