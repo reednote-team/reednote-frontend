@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import GlobalHeader from './components/Header.vue';
 import Minimap from './components/Minimap.vue'
+import Test from './components/Test.vue'
 </script>
 
 <template>
+  <!-- <Test /> -->
   <GlobalHeader />
   <div class="grid grid-cols-6 gap-2">
     <div>

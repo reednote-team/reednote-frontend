@@ -1,26 +1,28 @@
 import { createStore } from 'vuex'
 import axios from 'axios'
 
-interface NoteInfo {
-  name: string,
-  id: string
+type User = {
+  isSignedIn: boolean,
+  id?: string,
+  name?: string
 }
 
-interface NoteList {
-  count: number,
-  data: NoteInfo[]
+type NoteInfo = {
+  id: number,
+  title: string
 }
 
 type CurrentNote = NoteInfo & { content: string }
 
-export interface IState {
+type NoteList = {
+  count: number,
+  data: NoteInfo[]
+}
+
+export type IState = {
   status: 'loading' | 'loaded',
   error?: string,
-  user: {
-    isSignedIn: boolean,
-    id?: string,
-    name?: string
-  },
+  user: User,
   currentNote: CurrentNote,
   noteList: NoteList
 }
@@ -32,8 +34,8 @@ export default createStore<IState>({
       isSignedIn: true
     },
     currentNote: {
-      id: '', 
-      name: 'untitled.md',
+      id: 0,
+      title: 'untitled.md',
       content: ''
     },
     noteList: {
@@ -46,7 +48,7 @@ export default createStore<IState>({
       state.noteList = noteList
     },
     updateCurrentNoteName(state, name) {
-      state.currentNote.name = name
+      state.currentNote.title = name
     },
     updateCurrentNoteId(state, id) {
       state.currentNote.id = id
@@ -59,39 +61,45 @@ export default createStore<IState>({
     }
   },
   actions: {
-    fetchNoteList(store) {
-      axios.get('/notes').then((resp) => {
-        const notes: NoteList = JSON.parse(resp.data)
-        store.commit('updateNoteList', notes)
+    async fetchNoteList(store) {
+      const resp = await axios.get('/public-notes')
+      const notes: NoteInfo[] = resp.data.data
+      console.log(notes);
+      store.commit('updateNoteList', {
+        count: notes.length,
+        data: notes
       })
     },
-    saveNote(store) {
-      const note = store.state.currentNote
+    async saveNote(store) {
+      const note: CurrentNote = store.state.currentNote
       if (note.id) {
-        axios.put(`/notes/${note.id}`, note).then((resp) => {
-          
+        const resp = await axios.put(`/public-notes/${note.id}`, {
+          "data": {
+            title: note.title,
+            content: note.content
+          }
         })
       }
       else {
-        axios.post('/notes', note).then((resp) => {
-          
+        const resp = await axios.post('/public-notes', {
+          "data": {
+            title: note.title,
+            content: note.content
+          }
         })
       }
     },
-    deleteNote(store, id) {
-      axios.delete(`/notes/${id}`).then((resp) => {
-        
-      })
+    async deleteNote(store) {
+      axios.delete(`/public-notes/${store.state.currentNote.id}`)
     },
-    updateCurrentNoteContentFromServer(store, id) {
+    async updateCurrentNoteContentFromServer(store, id) {
       store.commit('updateStatus', 'loading')
-      axios.get(`/notes/${id}`).then((resp) => {
-        const note: CurrentNote = JSON.parse(resp.data)
-        store.commit('updateCurrentNoteContent', note.content)
-        store.commit('updateCurrentNoteName', note.name)
-        store.commit('updateCurrentNoteId', note.id)
-        store.commit('updateStatus', 'loaded')
-      })
+      const resp = await axios.get(`/public-notes/${id}`)
+      const note: CurrentNote = resp.data.data
+      store.commit('updateCurrentNoteContent', note.content)
+      store.commit('updateCurrentNoteName', note.title)
+      store.commit('updateCurrentNoteId', note.id)
+      store.commit('updateStatus', 'loaded')
     },
     updateCurrentNoteContentFromFile(store, file: File) {
       store.commit('updateStatus', 'loading')
@@ -100,7 +108,7 @@ export default createStore<IState>({
       reader.onload = () => {
         store.commit('updateCurrentNoteContent', reader.result as string)
         store.commit('updateCurrentNoteName', file.name)
-        store.commit('updateCurrentNoteId', '')
+        store.commit('updateCurrentNoteId', 0)
         store.commit('updateStatus', 'loaded')
       }
     },

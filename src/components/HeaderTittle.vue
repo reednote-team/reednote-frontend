@@ -9,7 +9,7 @@ const store = useStore<IState>()
 const router = useRouter()
 
 const name = computed(() => {
-  return store.state.currentNote.name
+  return store.state.currentNote.title
 })
 
 const onClickFileName = () => {

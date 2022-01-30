@@ -14,7 +14,7 @@ const id = computed(() => {
   return store.state.currentNote.id
 })
 const name = computed(() => {
-  return store.state.currentNote.name
+  return store.state.currentNote.title
 })
 const content = computed(() => {
   return store.state.currentNote.content
@@ -45,7 +45,7 @@ let dropdownItems: IItem[] = [
               store.commit('updateStatus', 'loading')
               store.commit('updateCurrentNoteContent', '')
               store.commit('updateCurrentNoteName', 'untitled.md')
-              store.commit('updateCurrentNoteId', '')
+              store.commit('updateCurrentNoteId', 0)
               setTimeout(() => {
                 store.commit('updateStatus', 'loaded')
               }, 10)
@@ -90,6 +90,25 @@ let dropdownItems: IItem[] = [
       else {
         store.dispatch('saveNote')
       }
+    }
+  },
+  {
+    name: 'delete',
+    disabled: computed(() => {
+      return id.value == 0
+    }),
+    action: () => {
+      emitter.emit('call-modal', {
+        type: 'comfirm',
+        message: 'do you really want to delete this note?',
+        onModalConfirm: () => {
+          store.dispatch('deleteNote')
+          router.push('/')
+        },
+        onModalCancel: () => {
+          return;
+        }
+      })
     }
   },
   {
@@ -160,7 +179,7 @@ let dropdownItems: IItem[] = [
   {
     name: 'delete',
     disabled: computed(() => {
-      return id.value == ''
+      return id.value == 0
     }),
     action: () => {
       emitter.emit('call-modal', {

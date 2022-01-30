@@ -7,7 +7,7 @@ import { computed } from 'vue';
 const store = useStore<IState>()
 store.commit('updateCurrentNoteContent', '')
 store.commit('updateCurrentNoteName', 'untitled.md')
-store.commit('updateCurrentNoteId', '')
+store.commit('updateCurrentNoteId', 0)
 store.dispatch('fetchNoteList')
 
 const noteList = computed(() => {
@@ -18,7 +18,7 @@ const noteList = computed(() => {
 
 <template>
   <div>
-    <Note v-for="note in noteList" :name="note.name" :id="note.id" />
+    <Note v-for="note in noteList" :title="note.title" :id="note.id" />
   </div>
 </template>
 
