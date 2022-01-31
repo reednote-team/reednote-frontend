@@ -15,13 +15,16 @@ const formValidation: FormValidationFunc = () => {
 </script>
 
 <template>
-  <FormVue :form-validation="formValidation">
-    <template #title>登陆账号</template>
-    <template #input>
-      <TextInputVue :title="'Email'" :type="'email'" />
-      <TextInputVue :title="'Password'" :type="'password'" />
-    </template>
-  </FormVue>
+  <div>
+    <FormVue :form-validation="formValidation">
+      <template #title>登陆账号</template>
+      <template #input>
+        <TextInputVue :title="'Email'" :type="'email'" />
+        <TextInputVue :title="'Password'" :type="'password'" />
+      </template>
+    </FormVue>
+    <router-link to="/sign-up" class="block w-fit mx-auto my-3 text-lg text-gray-400 cursor-pointer">no account? sign up</router-link>
+  </div>
 </template>
 
 <style scoped>

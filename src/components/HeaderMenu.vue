@@ -2,7 +2,7 @@
 import { computed, ref, } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { IState } from '../store/store'
+import { IState } from '../store'
 import { emitter } from './Modal.vue'
 import HerdaeButton from './HerdaeButton.vue'
 import HeaderDropdown, { IItem } from './HeaderDropdown.vue'
@@ -180,25 +180,6 @@ let dropdownItems: IItem[] = [
       }, 100);
     }
   },
-  {
-    name: 'delete',
-    disabled: computed(() => {
-      return id.value == 0
-    }),
-    action: () => {
-      emitter.emit('call-modal', {
-        type: 'comfirm',
-        message: 'Do you really want to delete this note?',
-        onModalConfirm: () => {
-          store.dispatch('deleteNote', id.value)
-          router.push(`/notes`)
-        },
-        onModalCancel: () => {
-          return;
-        }
-      })
-    }
-  },
 ]
 
 const showTOCButton = computed(() => {
@@ -217,7 +198,7 @@ const showTOCButton = computed(() => {
         <span class="material-icons-round">file_present</span>
       </HerdaeButton>
     </HeaderDropdown>
-    <HerdaeButton :disabled="false">
+    <HerdaeButton :disabled="false" @click="router.push('/sign-in')">
       <span class="material-icons-round">account_circle</span>
     </HerdaeButton>
   </div>

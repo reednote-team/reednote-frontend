@@ -5,18 +5,11 @@ import Test from './components/Test.vue'
 </script>
 
 <template>
-  <!-- <Test /> -->
-  <GlobalHeader />
-  <div class="grid grid-cols-6 gap-2">
-    <div>
-      <Minimap />
-    </div>
-    <div class="px-2 lg:col-span-5 col-span-full">
-      <div
-        class="container relative mt-20 mb-8 mx-auto min-h-screen max-w-[21cm] bg-white dark:bg-[#2e3440] shadow shadow-gray-300 rounded overflow-hidden"
-      >
-        <router-view></router-view>
-      </div>
+  <div class="h-screen overflow-hidden">
+    <GlobalHeader />
+    <div class="h-16"></div>
+    <div class="h-full">
+      <router-view></router-view>
     </div>
   </div>
 </template>

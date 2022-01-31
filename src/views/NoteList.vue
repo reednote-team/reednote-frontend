@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 import Note from '../components/NoteCover.vue';
 import { useStore } from 'vuex'
-import { IState } from '../store/store'
+import { IState } from '../store'
 import { computed } from 'vue';
 
 const store = useStore<IState>()
@@ -19,7 +19,7 @@ const noteList = computed(() => {
 </script>
 
 <template>
-  <div>
+  <div class="px-8">
     <Note v-for="note in noteList" :title="note.title" :id="note.id" />
   </div>
 </template>

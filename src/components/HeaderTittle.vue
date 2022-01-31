@@ -28,18 +28,7 @@ const onClickTitleTag = () => {
 }
 
 const onJump = () => {
-  if (displayTitleTag.value) {
-    emitter.emit('call-modal', {
-      type: 'comfirm',    
-      message: 'all content have not been saved may lost if you press confirm.',
-      onModalConfirm: () => {
-        router.push('/notes')
-      }
-    })
-  }
-  else {
-    router.push('/notes')
-  }
+  router.push('/notes')
 }
 </script>
 

@@ -1,13 +1,16 @@
 <script setup lang='ts'>
-import { computed, watch } from 'vue'
+import { computed } from 'vue'
 import MarkdownEditor from '../components/MarkdownEditor.vue'
-import { useRoute } from 'vue-router'
+import { useRouter, useRoute, onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import { useStore } from 'vuex'
 import { IState } from '../store'
+import Minimap from '../components/Minimap.vue'
+import { emitter } from '../components/Modal.vue'
 
 const store = useStore<IState>()
 
 const route = useRoute()
+const router = useRouter()
 
 if (route.params.id) {
   store.dispatch('getNote', route.params.id)
@@ -29,10 +32,37 @@ const editorStatus = computed(() => {
   return store.state.editorStatus
 })
 
+onBeforeRouteLeave((to, from, next) => {
+
+  emitter.emit('call-modal', {
+    type: 'comfirm',
+    title: 'leave?',
+    onModalConfirm() {
+      next(true)
+    },
+    onModalCancel() {
+      next(false)
+    }
+  })
+
+})
+
 </script>
 
 <template>
-  <MarkdownEditor v-if="editorStatus == 'loaded'" />
+  <div>
+    <Minimap />
+    <div class="flex pt-4 h-screen">
+      <div class="h-full w-[18%] max-w-sm hidden lg:block"></div>
+      <div class="h-full w-full overflow-scroll scrollbar scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-700">
+        <div
+          class="container relative mb-8 mx-auto min-h-screen max-w-[21cm] bg-white dark:bg-[#2e3440] shadow shadow-gray-300 rounded overflow-hidden"
+        >
+          <MarkdownEditor v-if="editorStatus == 'loaded'" />
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>

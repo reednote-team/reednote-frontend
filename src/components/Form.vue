@@ -1,4 +1,10 @@
 <script lang="ts">
+interface InputBox {
+  title: string,
+  getContent: () => string,
+  getError: () => string
+}
+
 import mitt from 'mitt'
 export const emitter = mitt<{
   'new-input-creation': InputBox
@@ -6,12 +12,6 @@ export const emitter = mitt<{
 </script>
 
 <script setup lang='ts'>
-interface InputBox {
-  title: string,
-  getContent: () => string,
-  getError: () => string
-}
-
 export type FormValidationFunc = (inputBoxes: InputBox[]) => string
 
 let props = defineProps<{
