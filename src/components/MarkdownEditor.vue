@@ -16,7 +16,7 @@ import { indent, indentPlugin } from '@milkdown/plugin-indent'
 import { listener, listenerCtx } from '@milkdown/plugin-listener'
 import { myHeading } from "../plugins/myHeadings"
 import { useStore } from 'vuex'
-import { IState } from '../store'
+import { IState } from '../store/store'
 import { computed } from "vue"
 
 const store = useStore<IState>()
@@ -31,7 +31,9 @@ const editor = useEditor((root) =>
       ctx.set(defaultValueCtx, content.value)
       ctx.set(listenerCtx, {
         markdown: [(get) => {
-          store.commit('updateCurrentNoteContent', get())
+          store.commit('getNote', {
+            content: get()
+          })
         }]
       });
     })

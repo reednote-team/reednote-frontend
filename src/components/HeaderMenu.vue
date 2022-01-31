@@ -2,7 +2,7 @@
 import { computed, ref, } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { IState } from '../store'
+import { IState } from '../store/store'
 import { emitter } from './Modal.vue'
 import HerdaeButton from './HerdaeButton.vue'
 import HeaderDropdown, { IItem } from './HeaderDropdown.vue'
@@ -26,7 +26,7 @@ const loadTextFromFile = (e: Event) => {
   const target = e.target as HTMLInputElement
   if (target.files?.length) {
     const file = target.files[0]
-    store.dispatch('updateCurrentNoteContentFromFile', file)
+    store.dispatch('uploadNote', file)
   }
   target.value = ''
 }
@@ -42,12 +42,14 @@ let dropdownItems: IItem[] = [
             type: 'comfirm',
             message: 'all content have not been saved will lost if you press confirm.',
             onModalConfirm: () => {
-              store.commit('updateStatus', 'loading')
-              store.commit('updateCurrentNoteContent', '')
-              store.commit('updateCurrentNoteName', 'untitled.md')
-              store.commit('updateCurrentNoteId', 0)
+              store.commit('changeEditorStatus', 'loading')
+              store.commit('getNote', {
+                id: 0,
+                title: 'untitled.md',
+                content: ''
+              })
               setTimeout(() => {
-                store.commit('updateStatus', 'loaded')
+                store.commit('changeEditorStatus', 'loaded')
               }, 10)
             },
             onModalCancel: () => {
@@ -84,11 +86,13 @@ let dropdownItems: IItem[] = [
           title: 'Save as',
           type: 'filenameInput',
           onModalConfirm: () => {
-            store.dispatch('saveNote')
+            if (store.state.currentNote.id == 0) store.dispatch('postNote')
+            else store.dispatch('putNote')
           }
         })
       else {
-        store.dispatch('saveNote')
+        if (store.state.currentNote.id == 0) store.dispatch('postNote')
+        else store.dispatch('putNote')
       }
     }
   },

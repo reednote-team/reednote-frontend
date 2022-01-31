@@ -1,17 +1,19 @@
 <script setup lang='ts'>
 import Note from '../components/NoteCover.vue';
 import { useStore } from 'vuex'
-import { IState } from '../store'
+import { IState } from '../store/store'
 import { computed } from 'vue';
 
 const store = useStore<IState>()
-store.commit('updateCurrentNoteContent', '')
-store.commit('updateCurrentNoteName', 'untitled.md')
-store.commit('updateCurrentNoteId', 0)
-store.dispatch('fetchNoteList')
+store.commit('getNote', {
+  id: 0,
+  title: 'untitled.md',
+  content: ''
+})
+store.dispatch('getNotes')
 
 const noteList = computed(() => {
-  return store.state.noteList.data
+  return store.state.noteList
 })
 
 </script>

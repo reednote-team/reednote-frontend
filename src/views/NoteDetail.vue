@@ -4,36 +4,29 @@ import MarkdownEditor from '../components/MarkdownEditor.vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { IState } from '../store'
-import { emitter } from '../plugins/myHeadings'
 
 const store = useStore<IState>()
 
 const route = useRoute()
 
 if (route.params.id) {
-  store.dispatch('updateCurrentNoteContentFromServer', route.params.id)
+  store.dispatch('getNote', route.params.id)
 }
 
 else {
-  store.commit('updateStatus', 'loading')
-  store.commit('updateCurrentNoteContent', '')
-  store.commit('updateCurrentNoteName', 'untitled.md')
-  store.commit('updateCurrentNoteId', 0)
+  store.commit('changeEditorStatus', 'loading')
+  store.commit('getNote', {
+    id: 0,
+    title: 'untitled.md',
+    content: ''
+  })
   setTimeout(() => {
-    store.commit('updateStatus', 'loaded')
+    store.commit('changeEditorStatus', 'loaded')
   }, 10)
 }
 
 const editorStatus = computed(() => {
-  return store.state.status
-})
-
-watch(editorStatus, () => {
-  setTimeout(() => {
-    if (editorStatus.value == 'loaded') {
-      emitter.emit('update-toc')
-    }
-  }, 10)
+  return store.state.editorStatus
 })
 
 </script>

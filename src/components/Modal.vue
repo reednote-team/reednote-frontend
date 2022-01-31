@@ -19,7 +19,7 @@ export const emitter = mitt<Events>()
 <script setup lang='ts'>
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex'
-import { IState } from '../store'
+import { IState } from '../store/store'
 
 const store = useStore<IState>()
 
@@ -27,7 +27,7 @@ const status = ref<'show' | 'hide'>('hide')
 const title = ref('Attention!')
 const message = ref('please confirm.')
 const filename = computed(() => {
-  return store.state.currentNote.name
+  return store.state.currentNote.title
 })
 const type = ref<'comfirm' | 'filenameInput'>('comfirm')
 const modalConfirmAction = ref(() => { })
@@ -54,6 +54,12 @@ emitter.on('call-modal', (modal) => {
     modalCancelAction.value = modal.onModalCancel
   status.value = 'show'
 })
+
+const changeNoteTitle = (title: string) => {
+  store.commit('getNote', {
+    title: title
+  })
+}
 
 </script>
 
@@ -94,7 +100,7 @@ emitter.on('call-modal', (modal) => {
             <div class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
               <input
                 :value="filename"
-                @change="store.commit('updateCurrentNoteName', ($event.target as HTMLInputElement).value)"
+                @change="changeNoteTitle(($event.target as HTMLInputElement).value)"
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-100 bg-transparent leading-tight focus:outline-none focus:border-cyan-500"
               />
             </div>

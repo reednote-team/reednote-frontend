@@ -1,116 +1,107 @@
 import { createStore } from 'vuex'
 import axios from 'axios'
+import { emitter } from './plugins/myHeadings'
 
-type User = {
-  isSignedIn: boolean,
-  id?: string,
-  name?: string
+type NoteState = {
+  editorStatus: 'loading' | 'loaded',
+  currentNote: {
+    id: number,
+    title: string,
+    content: string
+  },
+  noteList: {
+    id: number,
+    title: string
+  }[]
 }
 
-type NoteInfo = {
-  id: number,
-  title: string
+type UserState = {
+  user: {
+    isSignedIn: boolean,
+    id?: string,
+    name?: string
+  }
 }
 
-type CurrentNote = NoteInfo & { content: string }
-
-type NoteList = {
-  count: number,
-  data: NoteInfo[]
-}
-
-export type IState = {
-  status: 'loading' | 'loaded',
-  error?: string,
-  user: User,
-  currentNote: CurrentNote,
-  noteList: NoteList
-}
+export type IState = NoteState & UserState
 
 export default createStore<IState>({
   state: {
-    status: 'loaded',
-    user: {
-      isSignedIn: true
-    },
+    editorStatus: 'loaded',
     currentNote: {
       id: 0,
       title: 'untitled.md',
       content: ''
     },
-    noteList: {
-      count: 0,
-      data: []
+    noteList: [],
+    user: {
+      isSignedIn: true
     }
   },
   mutations: {
-    updateNoteList(state, noteList: NoteList) {
-      state.noteList = noteList
+    changeEditorStatus(state, status) {
+      state.editorStatus = status
     },
-    updateCurrentNoteName(state, name) {
-      state.currentNote.title = name
+    getNotes(state, notes) {
+      state.noteList = notes
     },
-    updateCurrentNoteId(state, id) {
-      state.currentNote.id = id
-    },
-    updateCurrentNoteContent(state, content: string) {
-      state.currentNote.content = content
-    },
-    updateStatus(state, status: 'loading' | 'loaded') {
-      state.status = status
+    getNote(state, note) {
+      if (note.id !== undefined) state.currentNote.id = note.id
+      if (note.title !== undefined) state.currentNote.title = note.title
+      if (note.content !== undefined) {
+        state.currentNote.content = note.content
+        setTimeout(() => {
+          emitter.emit('update-toc')
+        }, 10)
+      }
     }
   },
   actions: {
-    async fetchNoteList(store) {
+    async getNotes({ commit }) {
       const resp = await axios.get('/public-notes')
-      const notes: NoteInfo[] = resp.data.data
-      console.log(notes);
-      store.commit('updateNoteList', {
-        count: notes.length,
-        data: notes
+      const notes = resp.data.data
+      commit('getNotes', notes)
+    },
+    async getNote({ commit, state }, id) {
+      commit('changeEditorStatus', 'loading')
+      const resp = await axios.get(`/public-notes/${id}`)
+      const note = resp.data.data
+      commit('getNote', note)
+      commit('changeEditorStatus', 'loaded')
+    },
+    async postNote({ commit, state }) {
+      const note = state.currentNote
+      const resp = await axios.post(`/public-notes`, {
+        "data": {
+          title: note.title,
+          content: note.content
+        }
       })
     },
-    async saveNote(store) {
-      const note: CurrentNote = store.state.currentNote
-      if (note.id) {
-        const resp = await axios.put(`/public-notes/${note.id}`, {
-          "data": {
-            title: note.title,
-            content: note.content
-          }
-        })
-      }
-      else {
-        const resp = await axios.post('/public-notes', {
-          "data": {
-            title: note.title,
-            content: note.content
-          }
-        })
-      }
+    async putNote({ commit, state }) {
+      const note = state.currentNote
+      const resp = await axios.put('/public-notes/${note.id}', {
+        "data": {
+          title: note.title,
+          content: note.content
+        }
+      })
     },
-    async deleteNote(store) {
-      axios.delete(`/public-notes/${store.state.currentNote.id}`)
+    async deleteNote({ commit, state }) {
+      axios.delete(`/public-notes/${state.currentNote.id}`)
     },
-    async updateCurrentNoteContentFromServer(store, id) {
-      store.commit('updateStatus', 'loading')
-      const resp = await axios.get(`/public-notes/${id}`)
-      const note: CurrentNote = resp.data.data
-      store.commit('updateCurrentNoteContent', note.content)
-      store.commit('updateCurrentNoteName', note.title)
-      store.commit('updateCurrentNoteId', note.id)
-      store.commit('updateStatus', 'loaded')
-    },
-    updateCurrentNoteContentFromFile(store, file: File) {
-      store.commit('updateStatus', 'loading')
+    async uploadNote({ commit, state }, file: File) {
+      commit('changeEditorStatus', 'loading')
       const reader = new FileReader()
       reader.readAsText(file)
       reader.onload = () => {
-        store.commit('updateCurrentNoteContent', reader.result as string)
-        store.commit('updateCurrentNoteName', file.name)
-        store.commit('updateCurrentNoteId', 0)
-        store.commit('updateStatus', 'loaded')
+        commit('getNote', {
+          id: 0,
+          title: file.name,
+          content: reader.result as string
+        })
+        commit('changeEditorStatus', 'loaded')
       }
-    },
+    }
   }
 })
