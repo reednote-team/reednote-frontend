@@ -5,12 +5,16 @@ import FormVue, { FormValidationFunc } from '../components/Form.vue';
 import TextInputVue from '../components/TextInput.vue';
 const router = useRouter()
 const store = useStore()
-const formValidation: FormValidationFunc = () => {
-  if (true) {
+const formValidation: FormValidationFunc = async (inputBoxes) => {
+  const info = await store.dispatch('validateUser', {
+    identifier: inputBoxes.get('Email')?.getContent(),
+    password: inputBoxes.get('Password')?.getContent()
+  })
+  if (info.length == 0) {
     router.push('/')
-    store.commit('login')
   }
-  return ''
+  
+  return info
 }
 </script>
 

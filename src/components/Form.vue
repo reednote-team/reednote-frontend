@@ -12,24 +12,33 @@ export const emitter = mitt<{
 </script>
 
 <script setup lang='ts'>
-export type FormValidationFunc = (inputBoxes: InputBox[]) => string
+import { ref } from 'vue';
+export type FormValidationFunc = (inputBoxes: Map<string, InputBox>) => Promise<string>
 
 let props = defineProps<{
   formValidation: FormValidationFunc
 }>()
 
-const inputBoxes: InputBox[] = []
+const FormError = ref('')
+
+const inputBoxes: Map<string, InputBox> = new Map()
 
 const onNewInputCreation = (inputBox: InputBox): void => {
-  inputBoxes.push(inputBox)
+  inputBoxes.set(inputBox.title, inputBox)
 }
 
 emitter.on('new-input-creation', onNewInputCreation)
 
-const submit = () => {
-  let perBoxValidation: boolean = inputBoxes.every(box => (box.getError().length == 0))
+const submit = async () => {
+  let perBoxValidation: boolean = true
+  for (const box of inputBoxes.values()) {
+    if (box.getError().length != 0) {
+      perBoxValidation = false
+      break
+    }
+  }
   if (perBoxValidation) {
-    props.formValidation(inputBoxes)
+    FormError.value = await props.formValidation(inputBoxes)
   }
 }
 </script>
@@ -40,6 +49,10 @@ const submit = () => {
       <h2 class="text-2xl dark:text-gray-100 font-bold text-center mb-5">
         <slot name="title"></slot>
       </h2>
+      <div
+        :class="{hidden: FormError == ''}"
+        class="dark:bg-gray-700 border border-red-900 h-12 px-4 py-1 text-red-700 text-center"
+      >{{ FormError }}</div>
       <slot name="input"></slot>
     </div>
     <slot name="default">

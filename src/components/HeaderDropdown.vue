@@ -9,6 +9,7 @@ export interface IItem {
 }
 
 let props = defineProps<{
+  disabled: boolean,
   items: IItem[]
 }>()
 
@@ -30,7 +31,7 @@ watch(isClickOutside, () => {
 </script>
 
 <template>
-  <div class="relative" ref="dropdownRef" @click.prevent="changeStatus">
+  <div class="relative" :class="{hidden: props.disabled}" ref="dropdownRef" @click.prevent="changeStatus">
       <slot name="default">
         <span class="material-icons-round">arrow_dropdown</span>
       </slot>

@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
-import NoteCreate from './views/NoteCreate.vue'
 import NoteList from './views/NoteList.vue'
 import NoteDetail from './views/NoteDetail.vue'
 import SignIn from './views/SignIn.vue'
 import SignUp from './views/SignUp.vue'
+import Profile from './views/Profile.vue'
 
 const webHistory = createWebHistory()
 
@@ -34,5 +34,9 @@ export default createRouter({
       path: '/sign-up',
       component: SignUp
     },
+    {
+      path: '/profile',
+      component: Profile
+    }
   ]
 })

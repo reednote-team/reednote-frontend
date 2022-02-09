@@ -30,11 +30,10 @@ const testPut = async () => {
 }
 
 const testPost = () => {
-  axios.post('/public-notes', {
-    "data": {
-      "title": "test title",
-      "content": "# Hello world!",
-    }
+  axios.post('/auth/local/register', {
+    username: 'Strapi user',
+    email: 'user@strapi.io',
+    password: 'strapiPassword',
   }).then((resp) => {
     console.log(resp);
     
@@ -46,7 +45,7 @@ const testPost = () => {
 </script>
 
 <template>
-  <button class="text-white" @click="testGetOne">
+  <button class="text-white" @click="testPost">
     test
   </button>
 </template>

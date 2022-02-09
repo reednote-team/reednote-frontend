@@ -19,7 +19,7 @@ export const emitter = mitt<Events>()
 <script setup lang='ts'>
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex'
-import { IState } from '../store/store'
+import { IState } from '../store'
 
 const store = useStore<IState>()
 

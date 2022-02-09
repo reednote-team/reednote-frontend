@@ -1,23 +1,29 @@
 <script setup lang='ts'>
 import FormVue, { FormValidationFunc } from '../components/Form.vue';
 import TextInputVue from '../components/TextInput.vue';
+import { useStore } from 'vuex'
+import { IState } from '../store'
+import { useRouter } from 'vue-router';
 
-const formValidation: FormValidationFunc = (inputBoxes) => {
-  let pwd = ''
-  let cpwd = ''
-  inputBoxes.forEach((box) => {
-    if (box.title == 'Password') {
-      pwd = box.getContent()
-    }
-    else if (box.title == "Confirm Password") {
-      cpwd = box.getContent()
-    }
-  })
+const store = useStore<IState>()
+const router = useRouter()
+
+const formValidation: FormValidationFunc = async (inputBoxes) => {
+  let pwd = inputBoxes.get('Password')?.getContent()
+  let cpwd = inputBoxes.get('Confirm Password')?.getContent()
   if (pwd != cpwd) {
     return 'the password confirmed is different!'
   }
   else {
-    return ''
+    const info = await store.dispatch('registerUser', {
+      username: inputBoxes.get('Username')?.getContent(),
+      email: inputBoxes.get('Email')?.getContent(),
+      password: pwd
+    })
+    if (info.length == 0) {
+      router.push('/')
+    }
+    return info
   }
 }
 

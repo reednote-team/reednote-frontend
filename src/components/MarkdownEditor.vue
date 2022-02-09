@@ -16,7 +16,7 @@ import { indent, indentPlugin } from '@milkdown/plugin-indent'
 import { listener, listenerCtx } from '@milkdown/plugin-listener'
 import { myHeading } from "../plugins/myHeadings"
 import { useStore } from 'vuex'
-import { IState } from '../store/store'
+import { IState } from '../store'
 import { computed } from "vue"
 
 const store = useStore<IState>()

@@ -1,7 +1,14 @@
 <script setup lang="ts">
+import { onMounted } from 'vue';
 import GlobalHeader from './components/Header.vue';
-import Minimap from './components/Minimap.vue'
-import Test from './components/Test.vue'
+import { useStore } from 'vuex'
+import { IState } from './store'
+
+const store = useStore<IState>()
+
+onMounted(() => {
+  store.dispatch('keepUser')
+})
 </script>
 
 <template>

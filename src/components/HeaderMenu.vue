@@ -4,7 +4,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { IState } from '../store'
 import { emitter } from './Modal.vue'
-import HerdaeButton from './HerdaeButton.vue'
+import HeaderButton from './HeaderButton.vue'
 import HeaderDropdown, { IItem } from './HeaderDropdown.vue'
 
 const router = useRouter()
@@ -19,7 +19,9 @@ const name = computed(() => {
 const content = computed(() => {
   return store.state.currentNote.content
 })
-
+const username = computed(() => {
+  return store.state.user.name
+})
 const fileSelector = ref<HTMLElement | null>(null)
 
 const loadTextFromFile = (e: Event) => {
@@ -31,7 +33,7 @@ const loadTextFromFile = (e: Event) => {
   target.value = ''
 }
 
-let dropdownItems: IItem[] = [
+let FileDropdownItems: IItem[] = [
   {
     name: 'new',
     disabled: ref(false),
@@ -182,25 +184,55 @@ let dropdownItems: IItem[] = [
   },
 ]
 
+const userDropdownItems = [
+  {
+    name: 'Profile',
+    disabled: computed(() => {
+      return false
+    }),
+    action: () => {
+     router.push('/profile')
+    }
+  },
+  {
+    name: 'Logout',
+    disabled: computed(() => {
+      return false
+    }),
+    action: () => {
+      store.dispatch('logoutUser')
+    }
+  },
+]
+
 const showTOCButton = computed(() => {
   return route.path == '/notes' || route.path == '/'
+})
+
+const userSignedIn = computed(() => {
+  return store.state.user.isSignedIn
 })
 
 </script>
 
 <template>
-  <div v-if="true" class="flex space-x-2">
-    <HerdaeButton :disabled="showTOCButton">
-      <span class="material-icons-round">view_list</span>
-    </HerdaeButton>
-    <HeaderDropdown :items="dropdownItems">
-      <HerdaeButton :disabled="false">
-        <span class="material-icons-round">file_present</span>
-      </HerdaeButton>
-    </HeaderDropdown>
-    <HerdaeButton :disabled="false" @click="router.push('/sign-in')">
+  <div v-if="true" class="flex space-x-2 mr-2">
+  <HeaderButton :disabled="userSignedIn" @click="router.push('/sign-in')">
       <span class="material-icons-round">account_circle</span>
-    </HerdaeButton>
+    </HeaderButton>
+    <HeaderDropdown :disabled="!userSignedIn" :items="userDropdownItems">
+      <HeaderButton :disabled="false">
+        <span class="hidden material-icons-round">{{ username?.charAt(0).toUpperCase() }}</span>
+      </HeaderButton>
+    </HeaderDropdown>
+    <HeaderButton :disabled="showTOCButton">
+      <span class="material-icons-round">view_list</span>
+    </HeaderButton>
+    <HeaderDropdown :disabled="false" :items="FileDropdownItems">
+      <HeaderButton :disabled="false">
+        <span class="material-icons-round">file_present</span>
+      </HeaderButton>
+    </HeaderDropdown>
   </div>
   <div v-else>
     <a

@@ -1,6 +1,8 @@
 import { createStore } from 'vuex'
 import axios from 'axios'
 import { emitter } from './plugins/myHeadings'
+import jwt_decode from 'jwt-decode'
+const jwtDecode = jwt_decode
 
 type NoteState = {
   editorStatus: 'loading' | 'loaded',
@@ -19,7 +21,8 @@ type UserState = {
   user: {
     isSignedIn: boolean,
     id?: string,
-    name?: string
+    email?: string,
+    name?: string,
   }
 }
 
@@ -35,7 +38,7 @@ export default createStore<IState>({
     },
     noteList: [],
     user: {
-      isSignedIn: true
+      isSignedIn: false
     }
   },
   mutations: {
@@ -54,6 +57,15 @@ export default createStore<IState>({
           emitter.emit('update-toc')
         }, 10)
       }
+    },
+    changeUserStatus(state, user: {
+      isSignedIn: boolean,
+      token?: string,
+      id?: string,
+      email?: string,
+      name?: string
+    }) {
+      state.user = user
     }
   },
   actions: {
@@ -102,6 +114,57 @@ export default createStore<IState>({
         })
         commit('changeEditorStatus', 'loaded')
       }
+    },
+    async registerUser({ commit }, user: { username: string, email: string, password: string }) {
+      try {
+        const resp = await axios.post('/auth/local/register', user)
+        return ''
+      }
+      catch (error) {
+        return 'fail to register! email already exists.'
+      }
+    },
+    async validateUser({ commit, state }, user: { identifier: string, password: string }) {
+      try {
+        const resp = await axios.post('/auth/local', user)
+        commit('changeUserStatus', {
+          isSignedIn: true,
+          id: resp.data.user.id,
+          email: resp.data.user.email,
+          name: resp.data.user.username
+        })
+        localStorage.setItem("token", resp.data.jwt)
+        axios.defaults.headers.common.Authorization = `Bearer ${resp.data.jwt}`
+        return ''
+      }
+      catch (error) {
+        return 'Fail to sign in, wrong email or password!'
+      }
+    },
+    async keepUser({ commit, state }) {
+      const token = localStorage.getItem('token')
+      if (!token) {
+        localStorage.removeItem('token')
+        return
+      }
+      if (token && !state.user.isSignedIn) {
+        const id = (jwtDecode(localStorage.getItem('token') || '') as { id: string }).id
+        const resp = await axios.get(`/users/${id}`)
+        commit('changeUserStatus', {
+          isSignedIn: true,
+          id: resp.data.id,
+          email: resp.data.email,
+          name: resp.data.username
+        })
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`
+      }
+    },
+    logoutUser({ commit }) {
+      delete axios.defaults.headers.common["Authorization"]
+      localStorage.removeItem('token')
+      commit('changeUserStatus', {
+        isSignedIn: false
+      })
     }
   }
 })
