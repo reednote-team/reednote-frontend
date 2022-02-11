@@ -28,7 +28,7 @@ const onClickTitleTag = () => {
 }
 
 const onJump = () => {
-  router.push('/notes')
+  router.push('/')
 }
 </script>
 

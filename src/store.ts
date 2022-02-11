@@ -144,7 +144,6 @@ export default createStore<IState>({
     async keepUser({ commit, state }) {
       const token = localStorage.getItem('token')
       if (!token) {
-        localStorage.removeItem('token')
         return
       }
       if (token && !state.user.isSignedIn) {

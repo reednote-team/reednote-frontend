@@ -191,7 +191,7 @@ const userDropdownItems = [
       return false
     }),
     action: () => {
-     router.push('/profile')
+      router.push('/profile')
     }
   },
   {
@@ -201,12 +201,13 @@ const userDropdownItems = [
     }),
     action: () => {
       store.dispatch('logoutUser')
+      router.push('/')
     }
   },
 ]
 
 const showTOCButton = computed(() => {
-  return route.path == '/notes' || route.path == '/'
+  return route.path.match(/\/notes\//)
 })
 
 const userSignedIn = computed(() => {
@@ -217,7 +218,7 @@ const userSignedIn = computed(() => {
 
 <template>
   <div v-if="true" class="flex space-x-2 mr-2">
-  <HeaderButton :disabled="userSignedIn" @click="router.push('/sign-in')">
+    <HeaderButton :disabled="userSignedIn" @click="router.push('/sign-in')">
       <span class="material-icons-round">account_circle</span>
     </HeaderButton>
     <HeaderDropdown :disabled="!userSignedIn" :items="userDropdownItems">
@@ -225,10 +226,10 @@ const userSignedIn = computed(() => {
         <span class="hidden material-icons-round">{{ username?.charAt(0).toUpperCase() }}</span>
       </HeaderButton>
     </HeaderDropdown>
-    <HeaderButton :disabled="showTOCButton">
+    <HeaderButton :disabled="!showTOCButton || !userSignedIn">
       <span class="material-icons-round">view_list</span>
     </HeaderButton>
-    <HeaderDropdown :disabled="false" :items="FileDropdownItems">
+    <HeaderDropdown :disabled="!userSignedIn" :items="FileDropdownItems">
       <HeaderButton :disabled="false">
         <span class="material-icons-round">file_present</span>
       </HeaderButton>

@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import Home from './views/Home.vue'
 import NoteList from './views/NoteList.vue'
 import NoteDetail from './views/NoteDetail.vue'
 import SignIn from './views/SignIn.vue'
@@ -12,7 +13,7 @@ export default createRouter({
   routes: [
     {
       path: '/',
-      component: NoteList
+      component: Home,
     }, 
     {
       path: '/notes',

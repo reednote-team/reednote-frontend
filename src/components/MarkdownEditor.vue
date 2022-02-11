@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { Editor, rootCtx, defaultValueCtx } from "@milkdown/core"
+import { Editor, rootCtx, defaultValueCtx, editorViewOptionsCtx } from "@milkdown/core"
 import { nord } from "@milkdown/theme-nord"
 import { VueEditor, useEditor } from "@milkdown/vue"
 import { commonmark } from "@milkdown/preset-commonmark"
@@ -24,10 +24,15 @@ const content = computed(() => {
   return store.state.currentNote.content
 })
 
+const editable = () => {
+  return store.state.user.isSignedIn
+}
+
 const editor = useEditor((root) =>
   Editor.make()
     .config((ctx) => {
       ctx.set(rootCtx, root)
+      ctx.set(editorViewOptionsCtx, { editable })
       ctx.set(defaultValueCtx, content.value)
       ctx.set(listenerCtx, {
         markdown: [(get) => {

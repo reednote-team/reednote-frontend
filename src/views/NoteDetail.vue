@@ -33,18 +33,21 @@ const editorStatus = computed(() => {
 })
 
 onBeforeRouteLeave((to, from, next) => {
-
-  emitter.emit('call-modal', {
-    type: 'comfirm',
-    title: 'leave?',
-    onModalConfirm() {
-      next(true)
-    },
-    onModalCancel() {
-      next(false)
-    }
-  })
-
+  if (store.state.user.isSignedIn) {
+    emitter.emit('call-modal', {
+      type: 'comfirm',
+      title: 'leave?',
+      onModalConfirm() {
+        next(true)
+      },
+      onModalCancel() {
+        next(false)
+      }
+    })
+  }
+  else {
+    next(true)
+  }
 })
 
 </script>
@@ -54,7 +57,9 @@ onBeforeRouteLeave((to, from, next) => {
     <Minimap />
     <div class="flex pt-4 h-screen">
       <div class="h-full w-[18%] max-w-sm hidden lg:block"></div>
-      <div class="h-full w-full overflow-scroll scrollbar scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-700">
+      <div
+        class="h-full w-full overflow-scroll scrollbar scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-700"
+      >
         <div
           class="container relative mb-32 mt-4 mx-auto min-h-screen max-w-[21cm] bg-white dark:bg-[#2e3440] shadow shadow-gray-300 rounded overflow-hidden"
         >
