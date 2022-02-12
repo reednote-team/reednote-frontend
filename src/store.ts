@@ -115,9 +115,13 @@ export default createStore<IState>({
         commit('changeEditorStatus', 'loaded')
       }
     },
-    async registerUser({ commit }, user: { username: string, email: string, password: string }) {
+    async registerUser({ commit, dispatch }, user: { username: string, email: string, password: string }) {
       try {
         const resp = await axios.post('/auth/local/register', user)
+        dispatch('validateUser', {
+          identifier: user.email,
+          password: user.password
+        })
         return ''
       }
       catch (error) {
@@ -147,15 +151,14 @@ export default createStore<IState>({
         return
       }
       if (token && !state.user.isSignedIn) {
-        const id = (jwtDecode(localStorage.getItem('token') || '') as { id: string }).id
-        const resp = await axios.get(`/users/${id}`)
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`
+        const resp = await axios.get(`/users/me`)
         commit('changeUserStatus', {
           isSignedIn: true,
           id: resp.data.id,
           email: resp.data.email,
           name: resp.data.username
         })
-        axios.defaults.headers.common.Authorization = `Bearer ${token}`
       }
     },
     logoutUser({ commit }) {

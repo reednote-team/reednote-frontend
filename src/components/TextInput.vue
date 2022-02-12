@@ -45,7 +45,7 @@ emitter.emit('new-input-creation', {
       class="appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-100 bg-transparent leading-tight focus:outline-none focus:border-cyan-500"
       v-model="content"
       @blur="handler"
-      type="text"
+      :type="props.type.toLowerCase()"
       v-bind="$attrs"
     />
     <p class="text-red-500 text-sm" :class="{ 'hidden': !error.length }">{{ error }}</p>

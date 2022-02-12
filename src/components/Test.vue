@@ -4,50 +4,44 @@ import axios from 'axios'
 const testGetOne = async () => {
   const resp = await axios.get('/public-notes/3')
   console.log(resp);
-  
+
 }
 
 const testGet = async () => {
-  const resp = await axios.get('/public-notes')
-  console.log(resp.data.data);
-  
+  const resp = await axios.get('/notes')
+  console.log(resp.data);
 }
 
 const testDelete = async () => {
   const resp = await axios.delete('/public-notes/1')
   console.log(resp)
-  
+
 }
 
 const testPut = async () => {
-  const resp = await axios.put('/public-notes/3', {
+  const resp = await axios.put(`/notes/10`, {
     "data": {
-      "title": "test title updated",
-      "content": "# Hello world updated!",
+      title: 'test note updated',
+      content: '# hello world!',
+      author: 1
     }
   })
   console.log(resp)
 }
 
-const testPost = () => {
-  axios.post('/auth/local/register', {
-    username: 'Strapi user',
-    email: 'user@strapi.io',
-    password: 'strapiPassword',
-  }).then((resp) => {
-    console.log(resp);
-    
-  }).catch((err) => {
-    console.log(err);
-    
+const testPost = async () => {
+  const resp = await axios.post(`/notes`, {
+    data: {
+      title: 'test note',
+      content: '# hello world!',
+    }
   })
+  console.log(resp);
 }
 </script>
 
 <template>
-  <button class="text-white" @click="testPost">
-    test
-  </button>
+  <button class="text-white" @click="testPost">test</button>
 </template>
 
 <style scoped>

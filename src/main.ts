@@ -8,7 +8,8 @@ import './index.css'
 import 'prismjs/themes/prism-dark.css'
 import 'material-icons'
 
-axios.defaults.baseURL = 'http://127.0.0.1:1337/api'
+axios.defaults.baseURL = 'http://localhost:1337/api'
+// axios.defaults.baseURL = 'https://rnapi.kevyn.cn/api'
 
 prism.highlightAll()
 
