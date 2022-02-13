@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from './views/Home.vue'
+import R401 from './views/R401.vue'
 import NoteList from './views/NoteList.vue'
 import NoteDetail from './views/NoteDetail.vue'
 import SignIn from './views/SignIn.vue'
@@ -14,6 +15,10 @@ export default createRouter({
     {
       path: '/',
       component: Home,
+    }, 
+    {
+      path: '/401',
+      component: R401,
     }, 
     {
       path: '/notes',

@@ -41,11 +41,11 @@ const onJump = () => {
     @click.prevent="onJump"
     class="mx-4 mt-5 text-gray-100 text-xl font-bold float-left md:hidden cursor-pointer"
   >Rn</a>
-  <!-- <span
+  <span
     @click="onClickTitleTag"
     :class="{hidden: !displayTitleTag}"
     class="mt-5 text-gray-200 dark:bg-gray-700 bg-gray-500 p-1 rounded-md text-sm font-bold max-w-sm float-left cursor-pointer"
-  >{{ name }}</span> -->
+  >{{ name }}</span>
 </template>
 
 <style scoped>

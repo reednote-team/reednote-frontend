@@ -33,7 +33,7 @@ const editorStatus = computed(() => {
 })
 
 onBeforeRouteLeave((to, from, next) => {
-  if (store.state.user.isSignedIn) {
+  if (store.state.user.isSignedIn && to.path.indexOf('40') < 0) {
     emitter.emit('call-modal', {
       type: 'comfirm',
       title: 'leave?',

@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { emitter } from './plugins/myHeadings'
 import jwt_decode from 'jwt-decode'
 const jwtDecode = jwt_decode
@@ -70,20 +70,20 @@ export default createStore<IState>({
   },
   actions: {
     async getNotes({ commit }) {
-      const resp = await axios.get('/public-notes')
+      const resp = await axios.get('/notes')
       const notes = resp.data.data
       commit('getNotes', notes)
     },
     async getNote({ commit, state }, id) {
       commit('changeEditorStatus', 'loading')
-      const resp = await axios.get(`/public-notes/${id}`)
+      const resp = await axios.get(`/notes/${id}`)
       const note = resp.data.data
       commit('getNote', note)
       commit('changeEditorStatus', 'loaded')
     },
     async postNote({ commit, state }) {
       const note = state.currentNote
-      const resp = await axios.post(`/public-notes`, {
+      const resp = await axios.post(`/notes`, {
         "data": {
           title: note.title,
           content: note.content
@@ -92,7 +92,7 @@ export default createStore<IState>({
     },
     async putNote({ commit, state }) {
       const note = state.currentNote
-      const resp = await axios.put('/public-notes/${note.id}', {
+      const resp = await axios.put('/notes/${note.id}', {
         "data": {
           title: note.title,
           content: note.content
@@ -100,7 +100,7 @@ export default createStore<IState>({
       })
     },
     async deleteNote({ commit, state }) {
-      axios.delete(`/public-notes/${state.currentNote.id}`)
+      axios.delete(`/notes/${state.currentNote.id}`)
     },
     async uploadNote({ commit, state }, file: File) {
       commit('changeEditorStatus', 'loading')

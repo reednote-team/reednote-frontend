@@ -41,7 +41,7 @@ const testPost = async () => {
 </script>
 
 <template>
-  <button class="text-white" @click="testPost">test</button>
+  <button class="text-white" @click="testGet">test</button>
 </template>
 
 <style scoped>
