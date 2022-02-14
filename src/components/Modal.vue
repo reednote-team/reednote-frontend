@@ -1,5 +1,6 @@
 <script lang="ts">
 import mitt from 'mitt'
+import { computed, ref } from 'vue';
 
 type Modal = {
   title?: string,
@@ -13,11 +14,10 @@ type Events = {
   'call-modal': Modal
 }
 
-export const emitter = mitt<Events>()
+export const modalEmitter = mitt<Events>()
 </script>
 
 <script setup lang='ts'>
-import { computed, ref } from 'vue';
 import { useStore } from 'vuex'
 import { IState } from '../store'
 
@@ -42,7 +42,7 @@ const modalCloseAction = () => {
   modalCancelAction.value = () => { }
 }
 
-emitter.on('call-modal', (modal) => {
+modalEmitter.on('call-modal', (modal) => {
   if (modal.title)
     title.value = modal.title
   if (modal.message)
@@ -70,14 +70,14 @@ const changeNoteTitle = (title: string) => {
       :class="{ hidden: status == 'hide' }"
     >
       <div class="mx-auto my-4 px-4 w-full max-w-lg h-full md:h-auto items-center">
-        <div class="bg-white rounded-lg shadow dark:bg-gray-700">
+        <div class="bg-stone-700 rounded-lg shadow">
           <div
-            class="flex justify-between items-center p-5 rounded-t border-b dark:border-gray-600"
+            class="flex justify-between items-center p-5 rounded-t border-b border-stone-400"
           >
-            <h3 class="text-xl font-medium text-gray-900 dark:text-white">{{ title }}</h3>
+            <h3 class="text-xl font-medium text-white">{{ title }}</h3>
             <button
               @click="modalCloseAction()"
-              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              class="hover:bg-red-900 bg-transparent text-stone-100 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
             >
               <svg
                 class="w-5 h-5"
@@ -94,27 +94,27 @@ const changeNoteTitle = (title: string) => {
             </button>
           </div>
           <div v-if="type == 'comfirm'" class="p-6 space-y-4">
-            <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">{{ message }}</p>
+            <p class="text-base leading-relaxed text-stone-300">{{ message }}</p>
           </div>
           <div v-if="type == 'filenameInput'" class="p-6 space-y-4">
-            <div class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+            <div class="text-base leading-relaxed text-stone-100">
               <input
                 :value="filename"
                 @change="changeNoteTitle(($event.target as HTMLInputElement).value)"
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-100 bg-transparent leading-tight focus:outline-none focus:border-cyan-500"
+                class="appearance-none border rounded w-full py-2 px-3 text-stone-100 bg-transparent leading-tight focus:outline-none focus:border-cyan-500"
               />
             </div>
           </div>
           <div
-            class="mx-auto flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600 w-fit"
+            class="mx-auto flex items-center p-6 space-x-2 rounded-b border-t border-stone-500 w-fit"
           >
             <button
               @click="modalConfirmAction(); modalCloseAction()"
-              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              class="text-white bg-blue-900 hover:bg-blue-800 focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             >Confirm</button>
             <button
               @click="modalCancelAction(); modalCloseAction()"
-              class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600"
+              class="text-stone-100 bg-stone-700 hover:bg-stone-600 focus:ring-4 rounded-lg text-sm font-medium px-5 py-2.5 focus:z-10"
             >Cancel</button>
           </div>
         </div>

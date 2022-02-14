@@ -14,8 +14,8 @@ if (store.state.user.isSignedIn) {
 
 <template>
   <div class="mx-auto h-40 w-fit">
-    <span class="block w-full text-center text-gray-600 material-icons-round" style="font-size: 192px;">edit_note</span>
-    <span class="block w-full text-center font-bold font-mono text-gray-600 text-2xl">To Write What You Think</span>
+    <span class="block w-full text-center text-stone-300 material-icons-round" style="font-size: 192px;">edit_note</span>
+    <span class="block w-full text-center font-bold font-mono text-stone-300 text-2xl">To Write What You Think</span>
   </div>
 
 </template>

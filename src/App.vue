@@ -5,7 +5,6 @@ import { useStore } from 'vuex'
 import { IState } from './store'
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-import Test from './components/Test.vue';
 
 const store = useStore<IState>()
 const router = useRouter()
@@ -14,7 +13,7 @@ axios.interceptors.response.use((response) => {
   return response
 }, (error) => {
   if (error.response.status === 401) {
-    router.push('/401')
+    router.push('/R401!force')
   }
   return Promise.reject(error)
 })
@@ -26,10 +25,9 @@ onMounted(() => {
 
 <template>
   <div class="h-screen overflow-hidden">
-    <!-- <Test /> -->
     <GlobalHeader />
     <div class="h-16"></div>
-    <div class="h-full">
+    <div class="h-full overflow-scroll">
       <router-view></router-view>
     </div>
   </div>

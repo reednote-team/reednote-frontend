@@ -3,9 +3,9 @@ import { computed, ref, } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { IState } from '../store'
-import { emitter } from './Modal.vue'
+import { modalEmitter } from './Modal.vue'
+import { alertEmitter } from './Alert.vue'
 import HeaderButton from './HeaderButton.vue'
-import HeaderDropdown, { IItem } from './HeaderDropdown.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -13,7 +13,7 @@ const store = useStore<IState>()
 const id = computed(() => {
   return store.state.currentNote.id
 })
-const name = computed(() => {
+const filename = computed(() => {
   return store.state.currentNote.title
 })
 const content = computed(() => {
@@ -22,189 +22,150 @@ const content = computed(() => {
 const username = computed(() => {
   return store.state.user.name
 })
-const fileSelector = ref<HTMLElement | null>(null)
 
-const loadTextFromFile = (e: Event) => {
-  const target = e.target as HTMLInputElement
-  if (target.files?.length) {
-    const file = target.files[0]
-    store.dispatch('uploadNote', file)
-  }
-  target.value = ''
+const onClickFilenameTag = () => {
+  modalEmitter.emit('call-modal', {
+    title: 'File name',
+    type: 'filenameInput',
+    onModalConfirm: () => {
+      return
+    }
+  })
 }
 
-let FileDropdownItems: IItem[] = [
-  {
-    name: 'new',
-    disabled: ref(false),
-    action: () => {
-      if (route.path == '/notes/new') {
-        if (content.value != '') {
-          emitter.emit('call-modal', {
-            type: 'comfirm',
-            message: 'all content have not been saved will lost if you press confirm.',
-            onModalConfirm: () => {
-              store.commit('changeEditorStatus', 'loading')
-              store.commit('getNote', {
-                id: 0,
-                title: 'untitled.md',
-                content: ''
-              })
-              setTimeout(() => {
-                store.commit('changeEditorStatus', 'loaded')
-              }, 10)
-            },
-            onModalCancel: () => {
-              return;
-            }
-          })
-        }
-        else {
-          emitter.emit('call-modal', {
-            type: 'comfirm',
-            message: 'all content have not been saved will lost if you press confirm.',
-            onModalConfirm: () => {
-              router.push('/notes/new')
-            },
-            onModalCancel: () => {
-              return;
-            }
-          })
-        }
-      }
-      else {
-        router.push('/notes/new')
-      }
-    }
-  },
-  {
-    name: 'save',
-    disabled: computed(() => {
-      return content.value == ''
-    }),
-    action: () => {
-      if (name.value == 'untitled.md')
-        emitter.emit('call-modal', {
-          title: 'Save as',
-          type: 'filenameInput',
-          onModalConfirm: () => {
-            if (store.state.currentNote.id == 0) store.dispatch('postNote')
-            else store.dispatch('putNote')
-          }
-        })
-      else {
-        if (store.state.currentNote.id == 0) store.dispatch('postNote')
-        else store.dispatch('putNote')
-      }
-    }
-  },
-  {
-    name: 'delete',
-    disabled: computed(() => {
-      return id.value == 0
-    }),
-    action: () => {
-      emitter.emit('call-modal', {
+const displayFilenameTag = computed(() => {
+  return route.path.match(/\/notes\//) != null
+})
+
+const isANewNote = computed(() => {
+  return store.state.currentNote.id == 0
+})
+
+const create = () => {
+  if (route.path == '/notes/new') {
+    if (content.value != '') {
+      modalEmitter.emit('call-modal', {
         type: 'comfirm',
-        message: 'do you really want to delete this note?',
+        message: 'all content have not been saved will lost if you press confirm.',
         onModalConfirm: () => {
-          store.dispatch('deleteNote')
-          router.push('/')
+          store.commit('changeEditorStatus', 'loading')
+          store.commit('getNote', {
+            id: 0,
+            title: 'untitled.md',
+            content: ''
+          })
+          setTimeout(() => {
+            store.commit('changeEditorStatus', 'loaded')
+          }, 10)
         },
         onModalCancel: () => {
           return;
         }
       })
     }
-  },
-  {
-    name: 'upload',
-    disabled: computed(() => {
-      return false
-    }),
-    action: () => {
-      if (route.path == '/notes/new') {
-        if (content.value != '') {
-          emitter.emit('call-modal', {
-            type: 'comfirm',
-            message: 'all content have not been saved will lost if you press confirm.',
-            onModalConfirm: () => {
-              if (fileSelector.value) {
-                router.push('/notes/new')
-                fileSelector.value.click()
-              }
-            },
-            onModalCancel: () => {
-              return;
-            }
-          })
-        }
-        else {
-          emitter.emit('call-modal', {
-            type: 'comfirm',
-            message: 'all content have not been saved will lost if you press confirm.',
-            onModalConfirm: () => {
-              if (fileSelector.value) {
-                router.push('/notes/new')
-                fileSelector.value.click()
-              }
-            },
-            onModalCancel: () => {
-              return;
-            }
-          })
-        }
-      }
-      else {
-        if (fileSelector.value) {
+    else {
+      modalEmitter.emit('call-modal', {
+        type: 'comfirm',
+        message: 'all content have not been saved will lost if you press confirm.',
+        onModalConfirm: () => {
           router.push('/notes/new')
-          fileSelector.value.click()
+        },
+        onModalCancel: () => {
+          return;
         }
-      }
+      })
     }
-  },
-  {
-    name: 'download',
-    disabled: computed(() => {
-      return content.value == ''
-    }),
-    action: () => {
-      let text = store.state.currentNote.content
-      let blob = new Blob([text], { type: 'text/plain' })
-      let link = document.createElement("a")
-      link.download = name.value
-      link.href = window.URL.createObjectURL(blob)
-      document.body.appendChild(link)
-      link.click()
-      setTimeout(() => {
-        document.body.removeChild(link)
-        window.URL.revokeObjectURL(link.href)
-      }, 100);
-    }
-  },
-]
+  }
+  else {
+    router.push('/notes/new')
+  }
+}
 
-const userDropdownItems = [
-  {
-    name: 'Profile',
-    disabled: computed(() => {
-      return false
-    }),
-    action: () => {
-      router.push('/profile')
+const upload = async () => {
+  if (filename.value == 'untitled.md')
+    modalEmitter.emit('call-modal', {
+      title: 'Save as',
+      type: 'filenameInput',
+      onModalConfirm: () => { }
+    })
+  if (store.state.currentNote.id == 0) {
+    const resp = await store.dispatch('postNote')
+    router.push(`/notes/${resp.data.data.id}!force`)
+    store.state.currentNote.id = resp.data.data.id
+  }
+  else await store.dispatch('putNote')
+  alertEmitter.emit('call-alert', {
+    title: 'SUCCESS',
+    body: 'Successfully uploaded this note!',
+    keep: 3000
+  })
+}
+
+const deleteNote = () => {
+  modalEmitter.emit('call-modal', {
+    type: 'comfirm',
+    message: 'do you really want to delete this note?',
+    onModalConfirm: () => {
+      store.dispatch('deleteNote')
+      alertEmitter.emit('call-alert', {
+        title: 'SUCCESS',
+        body: 'Successfully deleted this note!',
+        keep: 3000
+      })
+      router.push('/!force')
+    },
+    onModalCancel: () => {
+      return;
     }
-  },
-  {
-    name: 'Logout',
-    disabled: computed(() => {
-      return false
-    }),
-    action: () => {
-      store.dispatch('logoutUser')
-      router.push('/')
-    }
-  },
-]
+  })
+}
+
+const download = () => {
+  let text = store.state.currentNote.content
+  let blob = new Blob([text], { type: 'text/plain' })
+  let link = document.createElement("a")
+  link.download = filename.value
+  link.href = window.URL.createObjectURL(blob)
+  document.body.appendChild(link)
+  link.click()
+  setTimeout(() => {
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(link.href)
+  }, 100);
+}
+
+// let FileDropdownItems: IItem[] = [
+//   {
+//     name: 'new',
+//     disabled: ref(false),
+//     action: create
+//   },
+//   {
+//     name: 'save',
+//     disabled: computed(() => {
+//       return content.value == ''
+//     }),
+//     action: save
+//   },
+//   {
+//     name: 'delete',
+//     disabled: computed(() => {
+//       return id.value == 0
+//     }),
+//     action: deleteNote
+//   },
+//   {
+//     name: 'download',
+//     disabled: computed(() => {
+//       return content.value == ''
+//     }),
+//     action: download
+//   },
+// ]
+
+const profile = () => {
+  router.push('/profile')
+}
 
 const showTOCButton = computed(() => {
   return route.path.match(/\/notes\//)
@@ -219,21 +180,42 @@ const userSignedIn = computed(() => {
 <template>
   <div v-if="true" class="flex space-x-2 mr-2">
     <HeaderButton :disabled="userSignedIn" @click="router.push('/sign-in')">
-      <span class="material-icons-round">account_circle</span>
+      <div class="bg-stone-800 px-1 text-white rounded-full">
+        <span class="material-icons-round relative top-1">account_circle</span>
+      </div>
     </HeaderButton>
-    <HeaderDropdown :disabled="!userSignedIn" :items="userDropdownItems">
-      <HeaderButton :disabled="false">
-        <span class="hidden material-icons-round">{{ username?.charAt(0).toUpperCase() }}</span>
-      </HeaderButton>
-    </HeaderDropdown>
-    <HeaderButton :disabled="!showTOCButton || !userSignedIn">
-      <span class="material-icons-round">view_list</span>
+    <HeaderButton :disabled="!userSignedIn" @click="profile">
+      <div class="bg-lime-800 px-1 text-white rounded-full">
+        <span class="material-icons-round relative top-1">account_circle</span>
+        <span class="mx-1 relative bottom-0.5 text-lg font-bold hidden md:inline">{{ username }}</span>
+      </div>
     </HeaderButton>
-    <HeaderDropdown :disabled="!userSignedIn" :items="FileDropdownItems">
-      <HeaderButton :disabled="false">
-        <span class="material-icons-round">file_present</span>
-      </HeaderButton>
-    </HeaderDropdown>
+    <HeaderButton :disabled="!displayFilenameTag" @click="onClickFilenameTag">
+      <div class="bg-slate-700 px-1 text-white rounded-full">
+        <span class="material-icons-round relative top-1">cloud_circle</span>
+        <span class="mx-1 relative bottom-0.5 text-lg font-bold hidden md:inline">{{ filename }}</span>
+      </div>
+    </HeaderButton>
+    <HeaderButton :disabled="!displayFilenameTag || !userSignedIn" @click="upload">
+      <div class="bg-blue-800 px-1 text-white rounded-full">
+        <span class="material-icons-round relative top-1">arrow_circle_up</span>
+      </div>
+    </HeaderButton>
+    <HeaderButton :disabled="!displayFilenameTag || !userSignedIn || isANewNote" @click="download">
+      <div class="bg-purple-800 px-1 text-white rounded-full">
+        <span class="material-icons-round relative top-1">arrow_circle_down</span>
+      </div>
+    </HeaderButton>
+    <HeaderButton :disabled="!displayFilenameTag || !userSignedIn || isANewNote" @click="deleteNote">
+      <div class="bg-red-800 px-1 text-white rounded-full">
+        <span class="material-icons-round relative top-1">remove_circle_outline</span>
+      </div>
+    </HeaderButton>
+    <HeaderButton :disabled="displayFilenameTag || !userSignedIn" @click="create">
+      <div class="bg-green-700 px-1 text-white rounded-full">
+        <span class="material-icons-round relative top-1">add_circle_outline</span>
+      </div>
+    </HeaderButton>
   </div>
   <div v-else>
     <a
@@ -244,7 +226,6 @@ const userSignedIn = computed(() => {
       class="px-4 py-3 text-lg text-white font-bold rounded-md hover:shadow-xl hover:bg-slate-800 focus:outline-none"
     >注册</a>
   </div>
-  <input type="file" @change="loadTextFromFile" ref="fileSelector" hidden />
 </template>
 
 <style scoped>

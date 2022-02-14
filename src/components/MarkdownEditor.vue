@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import { Editor, rootCtx, defaultValueCtx, editorViewOptionsCtx } from "@milkdown/core"
-import { nord } from "@milkdown/theme-nord"
+import { nord, nordLight } from "@milkdown/theme-nord"
 import { VueEditor, useEditor } from "@milkdown/vue"
 import { commonmark } from "@milkdown/preset-commonmark"
 import { history } from "@milkdown/plugin-history"
@@ -42,7 +42,7 @@ const editor = useEditor((root) =>
         }]
       });
     })
-    .use(nord)
+    .use(nordLight)
     .use(commonmark)
     .use(history)
     .use(listener)
@@ -85,6 +85,7 @@ const editor = useEditor((root) =>
   height: 0.8cm;
   width: 3.2cm;
   margin: 0px 5px 15px 20px;
+  @apply bg-stone-700 text-stone-100;
 }
 
 .milkdown .editor .code-fence_value span {
@@ -96,17 +97,18 @@ const editor = useEditor((root) =>
   width: 3.2cm;
   padding: 0px;
   margin: 0px;
+  @apply bg-stone-700 text-stone-100 scrollbar scrollbar-none !important;
 }
 
 .milkdown .editor a {
-  @apply text-cyan-500 dark:text-yellow-300 no-underline font-bold;
+  @apply text-lime-700 no-underline font-bold;
 }
 
 .milkdown .editor .code-inline {
-  @apply my-0 mx-1 py-0 px-1 bg-gray-200 text-black dark:bg-gray-600 dark:text-white text-center text-lg font-mono;
+  @apply my-0 mx-1 py-0 px-1 bg-slate-100 text-stone-900 text-center text-lg font-mono;
 }
 
 .milkdown .editor .code-fence {
-  @apply bg-gray-50 dark:bg-zinc-900;
+  @apply bg-stone-800 text-white font-bold;
 }
 </style>

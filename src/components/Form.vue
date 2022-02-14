@@ -44,20 +44,20 @@ const submit = async () => {
 </script>
 
 <template>
-  <div class="lg:w-1/2 w-80 max-w-lg lg:p-8 p-4 border-gray-600 shadow-md rounded-md mx-auto">
+  <div class="mt-16 lg:w-1/2 w-80 max-w-lg lg:p-8 p-4 border-stone-100 shadow-md rounded-md mx-auto">
     <div>
-      <h2 class="text-2xl dark:text-gray-100 font-bold text-center mb-5">
+      <h2 class="text-2xl text-stone-900 font-bold text-center mb-5">
         <slot name="title"></slot>
       </h2>
       <div
         :class="{hidden: FormError == ''}"
-        class="dark:bg-gray-700 border border-red-900 h-12 px-4 py-1 text-red-700 text-center"
+        class="bg-stone-100 border border-stone-300 h-fit px-4 py-2 text-red-900 text-center"
       >{{ FormError }}</div>
       <slot name="input"></slot>
     </div>
     <slot name="default">
       <a
-        class="block my-2 px-4 py-3 text-xl text-center text-white bg-gray-600 font-bold rounded-md hover:bg-gray-500 hover:shadow-xl focus:outline-none"
+        class="block my-2 px-4 py-3 text-xl text-center text-white bg-stone-800 font-bold rounded-md hover:bg-stone-700 hover:shadow-xl focus:outline-none"
         href="#"
         @click.prevent="submit"
       >提交</a>

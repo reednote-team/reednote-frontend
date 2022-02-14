@@ -17,10 +17,10 @@ const openNote = () => {
 <template>
   <div
     @click="openNote"
-    class="mx-6 my-4 border border-gray-400 hover:bg-gray-600 cursor-pointer rounded-md shadow p-3"
+    class="mx-6 my-4 max-w-sm bg-stone-200 hover:bg-stone-100 cursor-pointer rounded-md shadow p-3"
   >
-    <h3 class="text-white text-3xl">{{ props.title }}</h3>
-    <p class="text-sm text-gray-400 my-2">{{ props.id }}</p>
+    <h3 class="text-stone-900 text-3xl">{{ props.title }}</h3>
+    <p class="text-sm text-stone-600 my-2">{{ props.id }}</p>
   </div>
 </template>
 

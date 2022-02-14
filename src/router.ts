@@ -14,10 +14,10 @@ export default createRouter({
   routes: [
     {
       path: '/',
-      component: Home,
+      component: NoteList,
     }, 
     {
-      path: '/401',
+      path: '/R401',
       component: R401,
     }, 
     {

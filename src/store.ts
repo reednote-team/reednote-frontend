@@ -89,10 +89,11 @@ export default createStore<IState>({
           content: note.content
         }
       })
+      return resp
     },
     async putNote({ commit, state }) {
       const note = state.currentNote
-      const resp = await axios.put('/notes/${note.id}', {
+      const resp = await axios.put(`/notes/${note.id}`, {
         "data": {
           title: note.title,
           content: note.content
@@ -167,6 +168,7 @@ export default createStore<IState>({
       commit('changeUserStatus', {
         isSignedIn: false
       })
+      commit('getNotes', [])
     }
   }
 })
