@@ -20,17 +20,15 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="fixed w-[18%] max-w-sm hidden lg:block">
-    <div
-      class="min-h-screen max-h-screen pb-16 bg-stone-100 overflow-scroll scrollbar scrollbar-thin scrollbar-thumb-stone-300"
-    >
-      <a
-        v-for="heading in headings"
-        :href="`#${heading.hid}`"
-        class="block ml-2 mr-4 py-1 hover:bg-stone-300 text-stone-900"
-        :style="`padding-left: ${heading.type * 8}px; font-size: ${heading.type > 3 ? 12 : 4 + (6 - heading.type) * 3}px;`"
-      >{{ heading.text }}</a>
-    </div>
+  <div
+    class="min-h-screen max-h-screen pb-16 bg-stone-100 overflow-scroll scrollbar scrollbar-thin scrollbar-thumb-stone-300"
+  >
+    <a
+      v-for="heading in headings"
+      :href="`#${heading.hid}`"
+      class="block ml-2 mr-4 py-1 hover:bg-stone-300 text-stone-900 font-bold"
+      :style="`padding-left: ${heading.type * 8}px; font-size: ${heading.type > 3 ? 12 : 4 + (6 - heading.type) * 3}px;`"
+    >{{ heading.text }}</a>
   </div>
 </template>
 

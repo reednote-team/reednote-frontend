@@ -118,9 +118,10 @@ const openFile = () => {
 
 <template>
   <div>
-    <Minimap />
     <div class="flex pt-4 h-screen">
-      <div class="h-full w-[18%] max-w-sm hidden lg:block"></div>
+      <div class="h-full w-[18%] hidden lg:block">
+        <Minimap />
+      </div>
       <div class="h-full w-full overflow-scroll scrollbar scrollbar-thin scrollbar-thumb-stone-300">
         <div
           class="container relative mb-32 mt-4 mx-auto min-h-screen max-w-[21cm] bg-white shadow rounded overflow-hidden"

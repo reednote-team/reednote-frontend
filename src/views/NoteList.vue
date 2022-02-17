@@ -20,6 +20,7 @@ const noteList = computed(() => {
 
 <template>
   <div class="px-2 pb-16">
+    <!-- <Test /> -->
     <div class="mx-auto h-40 w-fit mb-32">
       <span
         class="block w-full text-center text-stone-300 material-icons-round"

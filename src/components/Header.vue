@@ -9,7 +9,7 @@ import Alert from './Alert.vue';
 <template>
   <div class="fixed w-full z-10 bg-stone-900 h-16 space-x-1 px-2">
     <HeaderTittle />
-    <div class="h-full py-5 float-left space-x-1">
+    <div class="h-full float-left space-x-1">
       <HeaderMenu />
     </div>
     <Modal />
