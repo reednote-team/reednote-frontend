@@ -110,7 +110,7 @@
     </div>
     <div class="py-4">
       <div class="text-stone-50 text-center">
-        This project is leading by
+        This project is mastered and led by
         <a
           class="text-white font-extrabold"
           href="https://github.com/KevynTang"
