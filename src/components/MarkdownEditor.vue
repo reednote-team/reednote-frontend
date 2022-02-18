@@ -66,7 +66,7 @@ const editor = useEditor((root) =>
 
 <template>
   <div class="mx-auto">
-    <VueEditor :editor="editor" class="unreset" />
+    <VueEditor id="editor" :editor="editor" class="unreset" />
   </div>
 </template>
 

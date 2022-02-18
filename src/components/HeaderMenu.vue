@@ -3,9 +3,10 @@ import { computed, ref, Ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { IState } from '../store'
-import { modalEmitter } from './Modal.vue'
+import { modalEmitter } from './ModalBase.vue'
 import { alertEmitter } from './Alert.vue'
 import HeaderButton from './HeaderButton.vue'
+
 
 const router = useRouter()
 const route = useRoute()
@@ -38,14 +39,6 @@ const isANewNote = () => {
 const isUserSignedIn = () => {
   return store.state.user.isSignedIn
 }
-
-const profile = () => {
-  router.push('/profile')
-}
-
-const showTOCButton = computed(() => {
-  return route.path.match(/\/notes\//)
-})
 
 type IItem = {
   role: string,
@@ -94,13 +87,7 @@ const headerMenuItems: IItem[] = [
       return !isInNoteView()
     }),
     onClick: () => {
-      modalEmitter.emit('call-modal', {
-        title: 'File name',
-        type: 'filenameInput',
-        onModalConfirm: () => {
-          return
-        }
-      })
+      modalEmitter.emit('call-note-info-modal', {})
     }
   },
 
@@ -116,14 +103,13 @@ const headerMenuItems: IItem[] = [
     onClick: () => {
       if (route.path == '/notes/new') {
         if (content.value != '') {
-          modalEmitter.emit('call-modal', {
-            type: 'comfirm',
+          modalEmitter.emit('call-confirm-modal', {
             message: 'all content have not been saved will lost if you press confirm.',
             onModalConfirm: () => {
               store.commit('changeEditorStatus', 'loading')
               store.commit('getNote', {
                 id: 0,
-                title: 'untitled.md',
+                title: 'untitled',
                 content: ''
               })
               setTimeout(() => {
@@ -136,8 +122,7 @@ const headerMenuItems: IItem[] = [
           })
         }
         else {
-          modalEmitter.emit('call-modal', {
-            type: 'comfirm',
+          modalEmitter.emit('call-confirm-modal', {
             message: 'all content have not been saved will lost if you press confirm.',
             onModalConfirm: () => {
               router.push('/notes/new')
@@ -164,12 +149,8 @@ const headerMenuItems: IItem[] = [
       return !isInNoteView() || !isUserSignedIn()
     }),
     onClick: async () => {
-      if (filename.value == 'untitled.md')
-        modalEmitter.emit('call-modal', {
-          title: 'Save as',
-          type: 'filenameInput',
-          onModalConfirm: () => { }
-        })
+      if (filename.value == 'untitled')
+        modalEmitter.emit('call-note-info-modal', {})
       if (store.state.currentNote.id == 0) {
         const resp = await store.dispatch('postNote')
         router.push(`/notes/${resp.data.data.id}!force`)
@@ -191,20 +172,20 @@ const headerMenuItems: IItem[] = [
     icon: 'arrow_circle_down',
     text: null,
     disabled: computed(() => {
-      return !isInNoteView() || !isUserSignedIn() || isANewNote()
+      return !isInNoteView() || isANewNote()
     }),
-    onClick: () => {
+    onClick: async () => {
       let text = store.state.currentNote.content
       let blob = new Blob([text], { type: 'text/plain' })
       let link = document.createElement("a")
-      link.download = filename.value
+      link.download = filename.value + '.md'
       link.href = window.URL.createObjectURL(blob)
       document.body.appendChild(link)
       link.click()
       setTimeout(() => {
         document.body.removeChild(link)
         window.URL.revokeObjectURL(link.href)
-      }, 100);
+      }, 100)
     }
   },
 
@@ -218,8 +199,7 @@ const headerMenuItems: IItem[] = [
       return !isInNoteView() || !isUserSignedIn() || isANewNote()
     }),
     onClick: () => {
-      modalEmitter.emit('call-modal', {
-        type: 'comfirm',
+      modalEmitter.emit('call-confirm-modal', {
         message: 'do you really want to delete this note?',
         onModalConfirm: () => {
           store.dispatch('deleteNote')
@@ -243,10 +223,17 @@ const headerMenuItems: IItem[] = [
 
 <template>
   <div class="flex space-x-2 mr-2 pt-3.5">
-    <HeaderButton v-for="item in headerMenuItems" :disabled="item.disabled.value" @click="item.onClick">
+    <HeaderButton
+      v-for="item in headerMenuItems"
+      :disabled="item.disabled.value"
+      @click="item.onClick"
+    >
       <div class="px-1 text-white rounded-md" :class="`${item.bgColor}`">
         <span class="material-icons-round relative top-1" style="font-size: 30px;">{{ item.icon }}</span>
-        <span v-if="item.text" class="mx-1 relative bottom-1 text-xl font-bold hidden md:inline">{{ item.text.value }}</span>
+        <span
+          v-if="item.text"
+          class="mx-1 relative bottom-1 text-xl font-bold hidden md:inline"
+        >{{ item.text.value }}</span>
       </div>
     </HeaderButton>
   </div>

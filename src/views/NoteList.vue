@@ -7,7 +7,7 @@ import { computed } from 'vue';
 const store = useStore<IState>()
 store.commit('getNote', {
   id: 0,
-  title: 'untitled.md',
+  title: 'untitled',
   content: ''
 })
 store.dispatch('getNotes')

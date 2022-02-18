@@ -1,4 +1,4 @@
-import { createStore } from 'vuex'
+import { createStore, storeKey } from 'vuex'
 import axios, { AxiosError } from 'axios'
 import { emitter } from './plugins/myHeadings'
 import jwt_decode from 'jwt-decode'
@@ -9,7 +9,8 @@ type NoteState = {
   currentNote: {
     id: number,
     title: string,
-    content: string
+    content: string,
+    hasPublic: boolean
   },
   noteList: {
     id: number,
@@ -33,8 +34,9 @@ export default createStore<IState>({
     editorStatus: 'loaded',
     currentNote: {
       id: 0,
-      title: 'untitled.md',
-      content: ''
+      title: 'untitled',
+      content: '',
+      hasPublic: false
     },
     noteList: [],
     user: {
@@ -51,6 +53,7 @@ export default createStore<IState>({
     getNote(state, note) {
       if (note.id !== undefined) state.currentNote.id = note.id
       if (note.title !== undefined) state.currentNote.title = note.title
+      if (note.hasPublic !== undefined) state.currentNote.hasPublic = note.hasPublic
       if (note.content !== undefined) {
         state.currentNote.content = note.content
         setTimeout(() => {
@@ -100,6 +103,14 @@ export default createStore<IState>({
         }
       })
     },
+    async switchPublic({ commit, state }) {
+      const note = state.currentNote
+      const resp = await axios.put(`/notes/${note.id}`, {
+        "data": {
+          hasPublic: note.hasPublic
+        }
+      })
+    },
     async deleteNote({ commit, state }) {
       axios.delete(`/notes/${state.currentNote.id}`)
     },
@@ -110,7 +121,7 @@ export default createStore<IState>({
       reader.onload = () => {
         commit('getNote', {
           id: 0,
-          title: file.name,
+          title: file.name.replace('.md', ''),
           content: reader.result as string
         })
         commit('changeEditorStatus', 'loaded')

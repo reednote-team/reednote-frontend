@@ -1,5 +1,4 @@
 <script setup lang='ts'>
-import Modal from './Modal.vue'
 import HeaderMenu from './HeaderMenu.vue'
 import HeaderTittle from './HeaderTittle.vue'
 import Alert from './Alert.vue';
@@ -12,7 +11,6 @@ import Alert from './Alert.vue';
     <div class="h-full float-left space-x-1">
       <HeaderMenu />
     </div>
-    <Modal />
     <Alert />
   </div>
 </template>

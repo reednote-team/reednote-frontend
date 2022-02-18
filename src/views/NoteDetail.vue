@@ -1,11 +1,11 @@
 <script setup lang='ts'>
 import { computed, ref } from 'vue'
 import MarkdownEditor from '../components/MarkdownEditor.vue'
-import { useRouter, useRoute, onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
+import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
 import { useStore } from 'vuex'
 import { IState } from '../store'
 import Minimap from '../components/Minimap.vue'
-import { modalEmitter } from '../components/Modal.vue'
+import { modalEmitter } from '../components/ModalBase.vue'
 
 const store = useStore<IState>()
 
@@ -35,7 +35,7 @@ else {
   store.commit('changeEditorStatus', 'loading')
   store.commit('getNote', {
     id: 0,
-    title: 'untitled.md',
+    title: 'untitled',
     content: ''
   })
   setTimeout(() => {
@@ -59,8 +59,7 @@ onBeforeRouteLeave((to, from, next) => {
     next(to.path.replace('!force', ''))
   }
   else {
-    modalEmitter.emit('call-modal', {
-      type: 'comfirm',
+    modalEmitter.emit('call-confirm-modal', {
       title: 'do you really want to leave?',
       message: 'all content have not been saved may lost if you press confiem.',
       onModalConfirm() {
@@ -76,8 +75,7 @@ onBeforeRouteLeave((to, from, next) => {
 const openFile = () => {
   if (route.path == '/notes/new') {
     if (content.value != '') {
-      modalEmitter.emit('call-modal', {
-        type: 'comfirm',
+      modalEmitter.emit('call-confirm-modal', {
         message: 'all content have not been saved will lost if you press confirm.',
         onModalConfirm: () => {
           if (fileSelector.value) {
@@ -91,8 +89,7 @@ const openFile = () => {
       })
     }
     else {
-      modalEmitter.emit('call-modal', {
-        type: 'comfirm',
+      modalEmitter.emit('call-confirm-modal', {
         message: 'all content have not been saved will lost if you press confirm.',
         onModalConfirm: () => {
           if (fileSelector.value) {

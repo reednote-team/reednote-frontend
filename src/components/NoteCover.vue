@@ -17,7 +17,7 @@ const openNote = () => {
 }
 
 onMounted(() => {
-  useQRCode(QRCode, `https://reednote.kevyn.cn/notes/${props.id}`)
+  useQRCode(QRCode, `https://reednote.kevyn.cn/notes/${props.id}`, 2, 4)
 })
 
 </script>
