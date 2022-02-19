@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import GlobalHeader from './components/Header.vue'
-import { useStore } from 'vuex'
-import { IState } from './store'
+import { useUserStore } from './stores/useUserStore';
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { loadingEmitter } from './components/Loading.vue'
@@ -10,7 +9,7 @@ import Footer from './components/Footer.vue'
 import Loading from './components/Loading.vue'
 import ModalAbstract from './components/ModalBase.vue'
 
-const store = useStore<IState>()
+const userStore = useUserStore()
 const router = useRouter()
 
 axios.interceptors.request.use((request) => {
@@ -24,13 +23,16 @@ axios.interceptors.response.use((response) => {
 }, (error) => {
   loadingEmitter.emit('switch-loading', false)
   if (error.response.status === 401) {
+    if (axios.defaults.headers.common["Authorization"]) {
+      delete axios.defaults.headers.common["Authorization"]
+    }
     router.push('/R401!force')
   }
   return Promise.reject(error)
 })
 
 onMounted(() => {
-  store.dispatch('keepUser')
+  userStore.recoverUser()
 })
 </script>
 

@@ -1,12 +1,11 @@
 <script setup lang='ts'>
 import { useRouter } from 'vue-router';
-import { useStore } from 'vuex'
-import { IState } from '../store'
+import { useUserStore } from '../stores/useUserStore';
 
 const router = useRouter()
-const store = useStore<IState>()
+const userStore = useUserStore()
 
-if (store.state.user.isSignedIn) {
+if (userStore.isSignedIn) {
   router.push('/notes')
 }
 

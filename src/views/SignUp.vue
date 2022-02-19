@@ -1,11 +1,10 @@
 <script setup lang='ts'>
 import FormVue, { FormValidationFunc } from '../components/Form.vue';
 import TextInputVue from '../components/TextInput.vue';
-import { useStore } from 'vuex'
-import { IState } from '../store'
 import { useRouter } from 'vue-router';
+import { useUserStore } from '../stores/useUserStore';
 
-const store = useStore<IState>()
+const userStore = useUserStore()
 const router = useRouter()
 
 const formValidation: FormValidationFunc = async (inputBoxes) => {
@@ -15,10 +14,10 @@ const formValidation: FormValidationFunc = async (inputBoxes) => {
     return 'the password confirmed is different!'
   }
   else {
-    const info = await store.dispatch('registerUser', {
-      username: inputBoxes.get('Username')?.getContent(),
-      email: inputBoxes.get('Email')?.getContent(),
-      password: pwd
+    const info = await userStore.registerUser({
+      username: inputBoxes.get('Username')?.getContent() as string,
+      email: inputBoxes.get('Email')?.getContent() as string,
+      password: pwd as string
     })
     if (info.length == 0) {
       router.push('/')

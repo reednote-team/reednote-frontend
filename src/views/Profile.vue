@@ -1,18 +1,13 @@
 <script setup lang='ts'>
-import { computed } from 'vue';
-import { useStore } from 'vuex'
-import { IState } from '../store'
+import { useUserStore } from '../stores/useUserStore';
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
 
-const store = useStore<IState>()
-const user = computed(() => {
-  return store.state.user
-})
+const userStore = useUserStore()
 
 const logout = async () => {
-  await store.dispatch('logoutUser')
+  await userStore.removeUser()
   router.push('/')
 }
 
@@ -25,15 +20,15 @@ const logout = async () => {
     <table class="text-stone-900 text-2xl w-full m-4">
       <tr>
         <td>id</td>
-        <td>{{ user.id }}</td>
+        <td>{{ userStore.id }}</td>
       </tr>
       <tr>
         <td>name</td>
-        <td>{{ user.name }}</td>
+        <td>{{ userStore.name }}</td>
       </tr>
       <tr>
         <td>email</td>
-        <td>{{ user.email }}</td>
+        <td>{{ userStore.email }}</td>
       </tr>
     </table>
     <div class="w-fit mx-4 mt-4 mb-2">

@@ -31,12 +31,12 @@
     "jwt-decode": "^3.1.2",
     "material-icons": "^1.10.4",
     "mitt": "^3.0.0",
+    "pinia": "^2.0.11",
     "prismjs": "^1.26.0",
     "qrcode-generator": "^1.4.4",
     "uuid": "^8.3.2",
     "vue": "^3.2.25",
-    "vue-router": "^4.0.12",
-    "vuex": "^4.0.2"
+    "vue-router": "^4.0.12"
   },
   "devDependencies": {
     "@types/uuid": "^8.3.4",

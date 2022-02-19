@@ -6,7 +6,7 @@ interface InputBox {
 }
 
 import mitt from 'mitt'
-export const emitter = mitt<{
+export const formEmitter = mitt<{
   'new-input-creation': InputBox
 }>()
 </script>
@@ -27,7 +27,7 @@ const onNewInputCreation = (inputBox: InputBox): void => {
   inputBoxes.set(inputBox.title, inputBox)
 }
 
-emitter.on('new-input-creation', onNewInputCreation)
+formEmitter.on('new-input-creation', onNewInputCreation)
 
 const submit = async () => {
   let perBoxValidation: boolean = true

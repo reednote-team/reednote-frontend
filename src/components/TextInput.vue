@@ -7,7 +7,7 @@ export default {
 <script setup lang='ts'>
 import { ref } from 'vue'
 import useTextValidation, { TextType } from '../hooks/useTextValidation'
-import { emitter } from './Form.vue'
+import { formEmitter } from './Form.vue'
 
 const props = defineProps<{
   title: string,
@@ -30,7 +30,7 @@ const getError = () => {
   return error.value
 }
 
-emitter.emit('new-input-creation', {
+formEmitter.emit('new-input-creation', {
   title: props.title,
   getContent: getContent,
   getError: getError

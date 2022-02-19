@@ -9,7 +9,7 @@ type Events = {
   'update-toc': void
 }
 
-export const emitter = mitt<Events>()
+export const TOCEmitter = mitt<Events>()
 
 let hids: string[] = []
 
@@ -21,7 +21,7 @@ interface Heading {
 
 export const headings = reactive<Heading[]>([])
 
-emitter.on('update-toc', () => {
+TOCEmitter.on('update-toc', () => {
   hids = hids.filter((hid) => {
     return document.querySelector(`.editor #${hid}`) instanceof HTMLElement
   })

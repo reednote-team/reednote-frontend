@@ -1,13 +1,12 @@
 <script setup lang='ts'>
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import MarkdownEditor from '../components/MarkdownEditor.vue'
 import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
-import { useStore } from 'vuex'
-import { IState } from '../store'
 import Minimap from '../components/Minimap.vue'
 import { modalEmitter } from '../components/ModalBase.vue'
+import { useNoteStore } from '../stores/useNoteStore'
 
-const store = useStore<IState>()
+const noteStore = useNoteStore()
 
 const route = useRoute()
 const router = useRouter()
@@ -18,34 +17,24 @@ const loadTextFromFile = (e: Event) => {
   const target = e.target as HTMLInputElement
   if (target.files?.length) {
     const file = target.files[0]
-    store.dispatch('uploadNote', file)
+    noteStore.uploadNote(file)
   }
   target.value = ''
 }
 
-const content = computed(() => {
-  return store.state.currentNote.content
-})
-
 if (route.params.id) {
-  store.dispatch('getNote', route.params.id)
+  noteStore.getNote(parseInt(route.params.id as string))
 }
 
 else {
-  store.commit('changeEditorStatus', 'loading')
-  store.commit('getNote', {
-    id: 0,
-    title: 'untitled',
-    content: ''
-  })
+  noteStore.editorStatus = 'loading'
+  noteStore.currentNote.id = 0
+  noteStore.currentNote.title = 'untitled'
+  noteStore.currentNote.content = ''
   setTimeout(() => {
-    store.commit('changeEditorStatus', 'loaded')
+    noteStore.editorStatus = 'loaded'
   }, 10)
 }
-
-const editorStatus = computed(() => {
-  return store.state.editorStatus
-})
 
 
 let forceLeave = false
@@ -74,7 +63,7 @@ onBeforeRouteLeave((to, from, next) => {
 
 const openFile = () => {
   if (route.path == '/notes/new') {
-    if (content.value != '') {
+    if (noteStore.currentNote.content != '') {
       modalEmitter.emit('call-confirm-modal', {
         message: 'all content have not been saved will lost if you press confirm.',
         onModalConfirm: () => {
@@ -123,7 +112,7 @@ const openFile = () => {
         <div
           class="container relative mb-32 mt-4 mx-auto min-h-screen max-w-[21cm] bg-white shadow rounded overflow-hidden"
         >
-          <MarkdownEditor v-if="editorStatus == 'loaded'" />
+          <MarkdownEditor v-if="noteStore.editorStatus == 'loaded'" />
           <div class="w-fit mx-auto mt-8 mb-8">
             <button
               @click="openFile"

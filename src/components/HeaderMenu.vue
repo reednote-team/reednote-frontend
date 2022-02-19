@@ -1,31 +1,32 @@
 <script setup lang='ts'>
 import { computed, ref, Ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useStore } from 'vuex'
-import { IState } from '../store'
 import { modalEmitter } from './ModalBase.vue'
 import { alertEmitter } from './Alert.vue'
 import HeaderButton from './HeaderButton.vue'
+import { useUserStore } from '../stores/useUserStore'
+import { useNoteStore } from '../stores/useNoteStore'
 
+const userStore = useUserStore()
+const noteStore = useNoteStore()
 
 const router = useRouter()
 const route = useRoute()
-const store = useStore<IState>()
 
 const id = computed(() => {
-  return store.state.currentNote.id
+  return noteStore.currentNote.id
 })
 
 const filename = computed(() => {
-  return store.state.currentNote.title
+  return noteStore.currentNote.title
 })
 
 const content = computed(() => {
-  return store.state.currentNote.content
+  return noteStore.currentNote.content
 })
 
 const username = computed(() => {
-  return store.state.user.name ? store.state.user.name : ''
+  return userStore.name
 })
 
 const isInNoteView = () => {
@@ -33,11 +34,11 @@ const isInNoteView = () => {
 }
 
 const isANewNote = () => {
-  return store.state.currentNote.id == 0
+  return noteStore.currentNote.id == 0
 }
 
 const isUserSignedIn = () => {
-  return store.state.user.isSignedIn
+  return userStore.isSignedIn
 }
 
 type IItem = {
@@ -106,14 +107,12 @@ const headerMenuItems: IItem[] = [
           modalEmitter.emit('call-confirm-modal', {
             message: 'all content have not been saved will lost if you press confirm.',
             onModalConfirm: () => {
-              store.commit('changeEditorStatus', 'loading')
-              store.commit('getNote', {
-                id: 0,
-                title: 'untitled',
-                content: ''
-              })
+              noteStore.editorStatus = 'loading'
+              noteStore.currentNote.id = 0
+              noteStore.currentNote.title = 'untitled',
+              noteStore.currentNote.content = ''
               setTimeout(() => {
-                store.commit('changeEditorStatus', 'loaded')
+                noteStore.editorStatus = 'loaded'
               }, 10)
             },
             onModalCancel: () => {
@@ -151,12 +150,12 @@ const headerMenuItems: IItem[] = [
     onClick: async () => {
       if (filename.value == 'untitled')
         modalEmitter.emit('call-note-info-modal', {})
-      if (store.state.currentNote.id == 0) {
-        const resp = await store.dispatch('postNote')
+      if (noteStore.currentNote.id == 0) {
+        const resp = await noteStore.postNote()
         router.push(`/notes/${resp.data.data.id}!force`)
-        store.state.currentNote.id = resp.data.data.id
+        noteStore.currentNote.id = resp.data.data.id
       }
-      else await store.dispatch('putNote')
+      else await noteStore.putNote()
       alertEmitter.emit('call-alert', {
         title: 'SUCCESS',
         body: 'Successfully uploaded this note!',
@@ -175,7 +174,7 @@ const headerMenuItems: IItem[] = [
       return !isInNoteView() || isANewNote()
     }),
     onClick: async () => {
-      let text = store.state.currentNote.content
+      let text = noteStore.currentNote.content
       let blob = new Blob([text], { type: 'text/plain' })
       let link = document.createElement("a")
       link.download = filename.value + '.md'
@@ -202,7 +201,7 @@ const headerMenuItems: IItem[] = [
       modalEmitter.emit('call-confirm-modal', {
         message: 'do you really want to delete this note?',
         onModalConfirm: () => {
-          store.dispatch('deleteNote')
+          noteStore.deleteNote()
           alertEmitter.emit('call-alert', {
             title: 'SUCCESS',
             body: 'Successfully deleted this note!',

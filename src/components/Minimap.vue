@@ -1,12 +1,13 @@
 <script setup lang='ts'>
 import { onMounted, onUnmounted } from 'vue';
-import { headings, emitter } from '../plugins/myHeadings'
+import { headings, TOCEmitter } from '../plugins/myHeadings'
 
 const updateTOC = (e: Event) => {
   const key = (e as KeyboardEvent).key
   const triggers: string[] = ['Enter', 'Backspace']
-  if (triggers.indexOf(key) >= 0)
-    emitter.emit('update-toc')
+  if (triggers.indexOf(key) >= 0) {
+    TOCEmitter.emit('update-toc')
+  }
 }
 
 onMounted(() => {

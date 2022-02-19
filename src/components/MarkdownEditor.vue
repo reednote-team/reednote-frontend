@@ -15,17 +15,15 @@ import { prism } from "@milkdown/plugin-prism"
 import { indent, indentPlugin } from '@milkdown/plugin-indent'
 import { listener, listenerCtx } from '@milkdown/plugin-listener'
 import { myHeading } from "../plugins/myHeadings"
-import { useStore } from 'vuex'
-import { IState } from '../store'
 import { computed } from "vue"
+import { useUserStore } from "../stores/useUserStore"
+import { useNoteStore } from "../stores/useNoteStore"
 
-const store = useStore<IState>()
-const content = computed(() => {
-  return store.state.currentNote.content
-})
+const userStore = useUserStore()
+const noteStore = useNoteStore()
 
 const editable = () => {
-  return store.state.user.isSignedIn
+  return userStore.isSignedIn
 }
 
 const editor = useEditor((root) =>
@@ -33,12 +31,10 @@ const editor = useEditor((root) =>
     .config((ctx) => {
       ctx.set(rootCtx, root)
       ctx.set(editorViewOptionsCtx, { editable })
-      ctx.set(defaultValueCtx, content.value)
+      ctx.set(defaultValueCtx, noteStore.currentNote.content)
       ctx.set(listenerCtx, {
         markdown: [(get) => {
-          store.commit('getNote', {
-            content: get()
-          })
+          noteStore.currentNote.content = get()
         }]
       });
     })

@@ -1,10 +1,12 @@
 <script setup lang='ts'>
-import { computed, onMounted, ref, Ref } from 'vue';
-import { NoteInfoModal, defaultNoteInfoModal } from './ModalBase.vue';
+import { computed, onMounted, ref } from 'vue';
+import { NoteInfoModal } from './ModalBase.vue';
 import useQRCode from '../hooks/useQRCode';
-import { useStore } from 'vuex'
-import { IState } from '../store'
+import { useUserStore } from '../stores/useUserStore'
+import { useNoteStore } from '../stores/useNoteStore';
 
+const userStore = useUserStore()
+const noteStore = useNoteStore()
 
 const props = defineProps<{
   payload: NoteInfoModal
@@ -12,31 +14,31 @@ const props = defineProps<{
 
 const payload = props.payload
 
-const store = useStore<IState>()
-
 const noteID = computed(() => {
-  return store.state.currentNote.id
+  return noteStore.currentNote.id
 })
 
 const filename = computed(() => {
-  return store.state.currentNote.title
+  return noteStore.currentNote.title
 })
 
 const hasPublic = computed(() => {
-  return store.state.currentNote.hasPublic
+  return noteStore.currentNote.hasPublic
+})
+
+const isNoteOwner = computed(() => {
+  return userStore.isSignedIn && userStore.id == noteStore.currentNote.author
 })
 
 const QRArea = ref<HTMLElement | null>(null)
 
 const changeNoteTitle = (title: string) => {
-  store.commit('getNote', {
-    title: title
-  })
+    noteStore.currentNote.title = title
 }
 
 const switchPublic = () => {
-  store.commit('getNote', { hasPublic: !hasPublic.value })
-  store.dispatch('switchPublic')
+  noteStore.currentNote.hasPublic = !noteStore.currentNote.hasPublic
+  noteStore.patchNote()
 }
 
 onMounted(() => {
@@ -76,7 +78,7 @@ onMounted(() => {
         class="appearance-none border rounded w-full py-2 px-3 text-stone-100 bg-transparent leading-tight focus:outline-none focus:border-cyan-500"
       />
     </div>
-    <div :class="{ hidden: !noteID }">
+    <div :class="{ hidden: !noteID || !isNoteOwner }">
       <div class="mx-auto h-64 w-64 bg-white" ref="QRArea"></div>
       <div class="w-fit mx-auto mt-4 mb-2">
         <button

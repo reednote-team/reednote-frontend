@@ -1,14 +1,15 @@
 <script setup lang='ts'>
 import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import { useUserStore } from '../stores/useUserStore';
 import FormVue, { FormValidationFunc } from '../components/Form.vue';
 import TextInputVue from '../components/TextInput.vue';
 const router = useRouter()
-const store = useStore()
+
+const userStore = useUserStore()
 const formValidation: FormValidationFunc = async (inputBoxes) => {
-  const info = await store.dispatch('validateUser', {
-    identifier: inputBoxes.get('Email')?.getContent(),
-    password: inputBoxes.get('Password')?.getContent()
+  const info = await userStore.validateUser({
+    identifier: inputBoxes.get('Email')?.getContent() as string,
+    password: inputBoxes.get('Password')?.getContent() as string
   })
   if (info.length == 0) {
     router.push('/')
