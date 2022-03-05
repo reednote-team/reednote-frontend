@@ -1,4 +1,3 @@
-import { TOCEmitter } from './../plugins/myHeadings'
 import { defineStore } from "pinia";
 import axios from 'axios'
 
@@ -9,6 +8,11 @@ type NoteStore = {
     title: string,
     author: number,
     content: string,
+    needSave: boolean,
+    outline: {
+      textID: string,
+      level: number
+    }[],
     hasPublic: boolean
   },
   noteList: {
@@ -18,7 +22,7 @@ type NoteStore = {
   getNotes: () => void,
   getNote: (id: number) => void,
   postNote: () => Promise<any>,
-  putNote: () => void,
+  putNote: () => Promise<any>,
   patchNote: () => void,
   deleteNote: () => void,
   uploadNote: (file: File) => void
@@ -31,6 +35,8 @@ export const useNoteStore = defineStore('note', (): NoteStore => ({
       title: 'untitled',
       author: -1,
       content: '',
+      needSave: false,
+      outline: [],
       hasPublic: false
     },
     noteList: [],
@@ -45,9 +51,6 @@ export const useNoteStore = defineStore('note', (): NoteStore => ({
       const note = resp.data.data
       this.currentNote = note
       this.editorStatus = 'loaded'
-      setTimeout(() => {
-        TOCEmitter.emit('update-toc')
-      }, 10)
     },
     async postNote() {
       const note = this.currentNote
@@ -57,6 +60,7 @@ export const useNoteStore = defineStore('note', (): NoteStore => ({
           content: note.content
         }
       })
+      this.currentNote.needSave = false
       return resp
     },
     async putNote() {
@@ -69,6 +73,7 @@ export const useNoteStore = defineStore('note', (): NoteStore => ({
           content: note.content
         }
       })
+      this.currentNote.needSave = false
     },
     async patchNote() {
       if (this.currentNote.id == -1)

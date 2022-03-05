@@ -31,6 +31,7 @@ else {
   noteStore.currentNote.id = 0
   noteStore.currentNote.title = 'untitled'
   noteStore.currentNote.content = ''
+  noteStore.currentNote.hasPublic = false
   setTimeout(() => {
     noteStore.editorStatus = 'loaded'
   }, 10)

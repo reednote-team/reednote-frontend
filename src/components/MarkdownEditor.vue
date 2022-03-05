@@ -1,8 +1,7 @@
 <script setup lang='ts'>
-import { Editor, rootCtx, defaultValueCtx, editorViewOptionsCtx } from "@milkdown/core"
-import { nord, nordLight } from "@milkdown/theme-nord"
+import { Editor, rootCtx, defaultValueCtx, editorViewOptionsCtx, editorStateCtx } from "@milkdown/core"
+import { nordLight } from "@milkdown/theme-nord"
 import { VueEditor, useEditor } from "@milkdown/vue"
-import { commonmark } from "@milkdown/preset-commonmark"
 import { history } from "@milkdown/plugin-history"
 import { gfm } from "@milkdown/preset-gfm"
 import { clipboard } from "@milkdown/plugin-clipboard"
@@ -14,8 +13,6 @@ import { upload } from "@milkdown/plugin-upload"
 import { prism } from "@milkdown/plugin-prism"
 import { indent, indentPlugin } from '@milkdown/plugin-indent'
 import { listener, listenerCtx } from '@milkdown/plugin-listener'
-import { myHeading } from "../plugins/myHeadings"
-import { computed } from "vue"
 import { useUserStore } from "../stores/useUserStore"
 import { useNoteStore } from "../stores/useNoteStore"
 
@@ -32,17 +29,35 @@ const editor = useEditor((root) =>
       ctx.set(rootCtx, root)
       ctx.set(editorViewOptionsCtx, { editable })
       ctx.set(defaultValueCtx, noteStore.currentNote.content)
-      ctx.set(listenerCtx, {
-        markdown: [(get) => {
-          noteStore.currentNote.content = get()
-        }]
-      });
+      ctx.get(listenerCtx)
+        .mounted((ctx) => {
+          const doc = ctx.get(editorStateCtx).doc;
+          const tocData: { textID: string; level: number }[] = [];
+          doc.descendants((node) => {
+            if (node.type.name === 'heading' && node.attrs['level']) {
+              tocData.push({ textID: node.textContent, level: node.attrs['level'] });
+            }
+          })
+          noteStore.currentNote.outline = tocData
+        })
+        .markdownUpdated((ctx, markdown, prevMarkdown) => {
+          noteStore.currentNote.content = markdown
+          noteStore.currentNote.needSave = true
+        })
+        .updated((_, doc) => {
+          const tocData: { textID: string; level: number }[] = [];
+          doc.descendants((node) => {
+            if (node.type.name === 'heading' && node.attrs['level']) {
+              tocData.push({ textID: node.textContent, level: node.attrs['level'] });
+            }
+          })
+          noteStore.currentNote.outline = tocData
+        })
     })
     .use(nordLight)
-    .use(commonmark)
+    .use(gfm)
     .use(history)
     .use(listener)
-    .use(gfm)
     .use(clipboard)
     .use(cursor)
     .use(slash)
@@ -56,7 +71,6 @@ const editor = useEditor((root) =>
         size: 4,
       }),
     )
-    .use(myHeading())
 );
 </script>
 

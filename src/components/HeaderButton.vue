@@ -5,7 +5,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="cursor-pointer" :class="{hidden: props.disabled}">
+  <div class="cursor-pointer select-none" :class="{hidden: props.disabled}">
     <a
       class="focus:outline-none"
       @click.prevent

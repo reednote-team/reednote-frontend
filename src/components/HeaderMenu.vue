@@ -43,7 +43,7 @@ const isUserSignedIn = () => {
 
 type IItem = {
   role: string,
-  bgColor: string,
+  bgColor: string | Ref<string>,
   icon: string,
   text: null | Ref<string>,
   disabled: Ref<boolean>,
@@ -141,21 +141,25 @@ const headerMenuItems: IItem[] = [
 
   {
     role: 'upload note to cloud',
-    bgColor: 'bg-blue-800',
+    bgColor: computed(() => {
+      return noteStore.currentNote.needSave ? 'bg-blue-700' : 'bg-gray-700'
+    }),
     icon: 'arrow_circle_up',
     text: null,
     disabled: computed(() => {
       return !isInNoteView() || !isUserSignedIn()
     }),
     onClick: async () => {
-      if (filename.value == 'untitled')
-        modalEmitter.emit('call-note-info-modal', {})
+      if (!noteStore.currentNote.needSave)
+        return
       if (noteStore.currentNote.id == 0) {
         const resp = await noteStore.postNote()
         router.push(`/notes/${resp.data.data.id}!force`)
         noteStore.currentNote.id = resp.data.data.id
       }
-      else await noteStore.putNote()
+      else {
+        await noteStore.putNote()
+      }
       alertEmitter.emit('call-alert', {
         title: 'SUCCESS',
         body: 'Successfully uploaded this note!',
@@ -227,7 +231,7 @@ const headerMenuItems: IItem[] = [
       :disabled="item.disabled.value"
       @click="item.onClick"
     >
-      <div class="px-1 text-white rounded-md" :class="`${item.bgColor}`">
+      <div class="px-1 text-white rounded-md" :class="`${typeof item.bgColor === 'string' ? item.bgColor : item.bgColor.value}`">
         <span class="material-icons-round relative top-1" style="font-size: 30px;">{{ item.icon }}</span>
         <span
           v-if="item.text"
