@@ -1,13 +1,17 @@
 <script setup lang='ts'>
 import { useUserStore } from '../stores/useUserStore';
+import { useNoteStore } from '../stores/useNoteStore';
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
 
 const userStore = useUserStore()
+const noteStore = useNoteStore()
 
 const logout = async () => {
-  await userStore.removeUser()
+  userStore.removeUser()
+  noteStore.cleanNote()
+  noteStore.noteList = []
   router.push('/')
 }
 
@@ -15,8 +19,11 @@ const logout = async () => {
 
 <template>
   <div
-    class="container mb-32 mt-4 mx-auto min-h-fit max-w-[21cm] bg-stone-200 shadow rounded overflow-hidden"
+    class="container mb-32 mt-4 mx-auto min-h-fit max-w-[21cm] bg-white shadow rounded overflow-hidden"
   >
+    <div>
+      <span class="material-icons-round text-stone-300" style="font-size: 196px">account_circle</span>
+    </div>
     <table class="text-stone-900 text-2xl w-full m-4">
       <tr>
         <td>id</td>

@@ -42,7 +42,7 @@ const editor = useEditor((root) =>
         })
         .markdownUpdated((ctx, markdown, prevMarkdown) => {
           noteStore.currentNote.content = markdown
-          noteStore.currentNote.needSave = true
+          noteStore.checkNeedSave()
         })
         .updated((_, doc) => {
           const tocData: { textID: string; level: number }[] = [];

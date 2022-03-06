@@ -1,3 +1,11 @@
+<script lang='ts'>
+let forceLeave = false
+
+export const setForceLeave = (value: boolean): void => {
+  forceLeave = value
+}
+</script>
+
 <script setup lang='ts'>
 import { ref } from 'vue'
 import MarkdownEditor from '../components/MarkdownEditor.vue'
@@ -27,26 +35,16 @@ if (route.params.id) {
 }
 
 else {
-  noteStore.editorStatus = 'loading'
-  noteStore.currentNote.id = 0
-  noteStore.currentNote.title = 'untitled'
-  noteStore.currentNote.content = ''
-  noteStore.currentNote.hasPublic = false
-  setTimeout(() => {
-    noteStore.editorStatus = 'loaded'
-  }, 10)
+  noteStore.cleanNote()
 }
 
-
-let forceLeave = false
 onBeforeRouteLeave((to, from, next) => {
-  if (forceLeave) {
+  if (noteStore.currentNote.needSave == false) {
+    next(true)
+  }
+  else if (forceLeave) {
     next(true)
     forceLeave = false
-  }
-  else if (to.path.indexOf('!force') >= 0) {
-    forceLeave = true
-    next(to.path.replace('!force', ''))
   }
   else {
     modalEmitter.emit('call-confirm-modal', {
@@ -64,12 +62,11 @@ onBeforeRouteLeave((to, from, next) => {
 
 const openFile = () => {
   if (route.path == '/notes/new') {
-    if (noteStore.currentNote.content != '') {
+    if (noteStore.currentNote.needSave == true) {
       modalEmitter.emit('call-confirm-modal', {
         message: 'all content have not been saved will lost if you press confirm.',
         onModalConfirm: () => {
           if (fileSelector.value) {
-            router.push('/notes/new')
             fileSelector.value.click()
           }
         },
@@ -79,25 +76,23 @@ const openFile = () => {
       })
     }
     else {
-      modalEmitter.emit('call-confirm-modal', {
-        message: 'all content have not been saved will lost if you press confirm.',
-        onModalConfirm: () => {
-          if (fileSelector.value) {
-            router.push('/notes/new')
-            fileSelector.value.click()
-          }
-        },
-        onModalCancel: () => {
-          return;
-        }
-      })
+      if (fileSelector.value) {
+        fileSelector.value.click()
+      }
     }
   }
   else {
-    if (fileSelector.value) {
-      router.push('/notes/new')
-      fileSelector.value.click()
-    }
+    modalEmitter.emit('call-confirm-modal', {
+      message: 'all content in this note will be overrided if you press confirm.',
+      onModalConfirm: () => {
+        if (fileSelector.value) {
+          fileSelector.value.click()
+        }
+      },
+      onModalCancel: () => {
+        return;
+      }
+    })
   }
 }
 

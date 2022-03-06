@@ -1,6 +1,7 @@
 <script setup lang='ts'>
 import { computed, onMounted, ref } from 'vue';
 import { NoteInfoModal } from './ModalBase.vue';
+import { alertEmitter } from './Alert.vue';
 import useQRCode from '../hooks/useQRCode';
 import { useUserStore } from '../stores/useUserStore'
 import { useNoteStore } from '../stores/useNoteStore';
@@ -33,12 +34,27 @@ const isNoteOwner = computed(() => {
 const QRArea = ref<HTMLElement | null>(null)
 
 const changeNoteTitle = (title: string) => {
-    noteStore.currentNote.title = title
+  noteStore.currentNote.title = title
+  noteStore.patchNote({
+    title: noteStore.currentNote.title
+  })
+  alertEmitter.emit('call-alert', {
+    title: 'SUCCESS',
+    body: `the title of this note changed`,
+    keep: 2000
+  })
 }
 
 const switchPublic = () => {
   noteStore.currentNote.hasPublic = !noteStore.currentNote.hasPublic
-  noteStore.patchNote()
+  noteStore.patchNote({
+    hasPublic: noteStore.currentNote.hasPublic
+  })
+  alertEmitter.emit('call-alert', {
+    title: 'SUCCESS',
+    body: `the publicity of this note change to ${noteStore.currentNote.hasPublic ? 'public' : 'private'}`,
+    keep: 2000
+  })
 }
 
 onMounted(() => {
@@ -74,7 +90,7 @@ onMounted(() => {
     <div class="text-base leading-relaxed text-stone-100">
       <input
         :value="filename"
-        @change="changeNoteTitle(($event.target as HTMLInputElement).value)"
+        @blur="changeNoteTitle(($event.target as HTMLInputElement).value)"
         class="appearance-none border rounded w-full py-2 px-3 text-stone-100 bg-transparent leading-tight focus:outline-none focus:border-cyan-500"
       />
     </div>

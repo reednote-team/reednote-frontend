@@ -6,6 +6,7 @@ import { alertEmitter } from './Alert.vue'
 import HeaderButton from './HeaderButton.vue'
 import { useUserStore } from '../stores/useUserStore'
 import { useNoteStore } from '../stores/useNoteStore'
+import { setForceLeave } from '../views/NoteDetail.vue'
 
 const userStore = useUserStore()
 const noteStore = useNoteStore()
@@ -34,7 +35,7 @@ const isInNoteView = () => {
 }
 
 const isANewNote = () => {
-  return noteStore.currentNote.id == 0
+  return noteStore.currentNote.id == -1
 }
 
 const isUserSignedIn = () => {
@@ -152,9 +153,10 @@ const headerMenuItems: IItem[] = [
     onClick: async () => {
       if (!noteStore.currentNote.needSave)
         return
-      if (noteStore.currentNote.id == 0) {
+      if (noteStore.currentNote.id == -1) {
         const resp = await noteStore.postNote()
-        router.push(`/notes/${resp.data.data.id}!force`)
+        setForceLeave(true)
+        router.push(`/notes/${resp.data.data.id}`)
         noteStore.currentNote.id = resp.data.data.id
       }
       else {
@@ -211,7 +213,8 @@ const headerMenuItems: IItem[] = [
             body: 'Successfully deleted this note!',
             keep: 3000
           })
-          router.push('/!force')
+          setForceLeave(true)
+          router.push('/')
         },
         onModalCancel: () => {
           return;

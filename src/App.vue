@@ -13,7 +13,9 @@ const userStore = useUserStore()
 const router = useRouter()
 
 axios.interceptors.request.use((request) => {
-  loadingEmitter.emit('switch-loading', true)
+  if (request.method != 'get' || request.url?.match(/\/notes\//) != null)
+    loadingEmitter.emit('switch-loading', true)
+
   return request
 })
 
@@ -26,7 +28,7 @@ axios.interceptors.response.use((response) => {
     if (axios.defaults.headers.common["Authorization"]) {
       delete axios.defaults.headers.common["Authorization"]
     }
-    router.push('/R401!force')
+    router.push('/R401')
   }
   return Promise.reject(error)
 })
