@@ -7,9 +7,9 @@ export const setForceLeave = (value: boolean): void => {
 </script>
 
 <script setup lang='ts'>
-import { ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import MarkdownEditor from '../components/MarkdownEditor.vue'
-import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
+import { useRouter, useRoute, onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import Minimap from '../components/Minimap.vue'
 import { modalEmitter } from '../components/ModalBase.vue'
 import { useNoteStore } from '../stores/useNoteStore'

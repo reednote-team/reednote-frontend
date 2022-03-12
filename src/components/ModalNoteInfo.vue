@@ -34,6 +34,8 @@ const isNoteOwner = computed(() => {
 const QRArea = ref<HTMLElement | null>(null)
 
 const changeNoteTitle = (title: string) => {
+  if (title === noteStore.currentNote.title)
+    return
   noteStore.currentNote.title = title
   noteStore.patchNote({
     title: noteStore.currentNote.title
@@ -90,11 +92,12 @@ onMounted(() => {
     <div class="text-base leading-relaxed text-stone-100">
       <input
         :value="filename"
+        :disabled="!isNoteOwner"
         @blur="changeNoteTitle(($event.target as HTMLInputElement).value)"
         class="appearance-none border rounded w-full py-2 px-3 text-stone-100 bg-transparent leading-tight focus:outline-none focus:border-cyan-500"
       />
     </div>
-    <div :class="{ hidden: !noteID || !isNoteOwner }">
+    <div v-if="noteID && isNoteOwner">
       <div class="mx-auto h-64 w-64 bg-white" ref="QRArea"></div>
       <div class="w-fit mx-auto mt-4 mb-2">
         <button

@@ -5,6 +5,7 @@ type CurrentNote = {
   id: number,
   title: string,
   author: number,
+  noteSet: number,
   content: string,
   hasPublic: boolean
 }
@@ -23,7 +24,10 @@ type NoteStore = {
   currentNote: CurrentNote & CurrentNoteStatus,
   noteList: {
     id: number,
-    title: string
+    title: string,
+    author: string,
+    noteSet: number,
+    hasPublic: boolean
   }[],
   getNotes: () => void,
   getNote: (id: number) => void,
@@ -43,6 +47,7 @@ export const useNoteStore = defineStore('note', (): NoteStore => ({
     title: 'untitled',
     author: -1,
     content: '',
+    noteSet: -1,
     needSave: false,
     lastSave: '',
     outline: [],
@@ -89,7 +94,10 @@ export const useNoteStore = defineStore('note', (): NoteStore => ({
         content: note.content
       }
     })
-    this.currentNote.needSave = false
+    this.currentNote = {
+      ...resp.data.data,
+      needSave: false
+    }
     return resp
   },
   async putNote() {

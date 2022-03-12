@@ -155,9 +155,9 @@ const headerMenuItems: IItem[] = [
         return
       if (noteStore.currentNote.id == -1) {
         const resp = await noteStore.postNote()
+        console.log(resp);
         setForceLeave(true)
         router.push(`/notes/${resp.data.data.id}`)
-        noteStore.currentNote.id = resp.data.data.id
       }
       else {
         await noteStore.putNote()
