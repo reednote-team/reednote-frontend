@@ -48,7 +48,7 @@ onMounted(() => {
     </div>
     <div v-if="!showQRCode" class="relative bottom-24 hover:hidden flex mx-2 p-2 bg-transparent items-center rounded-md shadow max-w-sm cursor-pointer">
       <div class="h-20 w-20 bg-stone-300 grid place-items-center">
-        <div v-if="note?.hasPublic" class="w-fit text-stone-500 material-icons" style="font-size: 48px;">lock</div>
+        <div v-if="!note?.hasPublic" class="w-fit text-stone-500 material-icons" style="font-size: 48px;">lock</div>
         <div v-else class="w-fit text-stone-500 material-icons" style="font-size: 48px;">lock_open</div>
       </div>
     </div>
