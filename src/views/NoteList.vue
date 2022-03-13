@@ -3,7 +3,7 @@ import { onMounted } from 'vue';
 import Note from '../components/NoteCover.vue';
 import { useNoteStore } from '../stores/useNoteStore'
 import { useNoteSetStore } from '../stores/useNoteSetStore'
-import NoteSet from '../components/NoteSet.vue';
+import NoteSet from '../components/NoteSetCover.vue';
 
 const noteStore = useNoteStore()
 const noteSetStore = useNoteSetStore()

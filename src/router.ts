@@ -9,7 +9,7 @@ import Profile from './views/Profile.vue'
 
 const webHistory = createWebHistory()
 
-export default createRouter({
+const router = createRouter({
   history: webHistory,
   routes: [
     {
@@ -46,3 +46,10 @@ export default createRouter({
     }
   ]
 })
+
+router.beforeEach((to, from) => {
+  scroll(0,0)
+  return true
+})
+
+export default router
