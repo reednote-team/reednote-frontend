@@ -84,7 +84,8 @@ export const useNoteStore = defineStore('note', (): NoteStore => ({
     }, 10)
   },
   checkNeedSave() {
-    this.currentNote.needSave = this.currentNote.content !== this.currentNote.lastSave
+    // this.currentNote.needSave = this.currentNote.content !== this.currentNote.lastSave
+    this.currentNote.needSave = true
   },
   async postNote() {
     const note = this.currentNote

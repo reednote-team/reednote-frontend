@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from './views/Home.vue'
 import R401 from './views/R401.vue'
 import NoteList from './views/NoteList.vue'
 import NoteDetail from './views/NoteDetail.vue'
@@ -45,11 +44,6 @@ const router = createRouter({
       component: Profile
     }
   ]
-})
-
-router.beforeEach((to, from) => {
-  scroll(0,0)
-  return true
 })
 
 export default router

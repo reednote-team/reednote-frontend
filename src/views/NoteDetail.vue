@@ -7,19 +7,29 @@ export const setForceLeave = (value: boolean): void => {
 </script>
 
 <script setup lang='ts'>
-import { onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
 import MarkdownEditor from '../components/MarkdownEditor.vue'
 import { useRouter, useRoute, onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import Minimap from '../components/Minimap.vue'
 import { modalEmitter } from '../components/ModalBase.vue'
 import { useNoteStore } from '../stores/useNoteStore'
+import { useUserStore } from '../stores/useUserStore'
 
 const noteStore = useNoteStore()
+const userStore = useUserStore()
 
 const route = useRoute()
 const router = useRouter()
 
 const fileSelector = ref<HTMLElement | null>(null)
+
+const isNoteOwner = computed(() => {
+  return userStore.isSignedIn && userStore.id == noteStore.currentNote.author
+})
+
+const isNewNote = computed(() => {
+  return noteStore.currentNote.id == -1
+})
 
 const loadTextFromFile = (e: Event) => {
   const target = e.target as HTMLInputElement
@@ -109,16 +119,16 @@ const openFile = () => {
           class="container relative mb-32 mt-4 mx-auto min-h-screen max-w-[21cm] bg-white shadow rounded overflow-hidden"
         >
           <MarkdownEditor v-if="noteStore.editorStatus == 'loaded'" />
-          <div class="w-fit mx-auto mt-8 mb-8">
+          <div v-if="isNoteOwner || isNewNote" class="w-fit mx-auto mt-8 mb-8">
             <button
               @click="openFile"
               class="text-stone-900 bg-green-200 hover:bg-green-100 focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             >Open File</button>
+            <input type="file" @change="loadTextFromFile" ref="fileSelector" hidden />
           </div>
         </div>
       </div>
     </div>
-    <input type="file" @change="loadTextFromFile" ref="fileSelector" hidden />
   </div>
 </template>
 

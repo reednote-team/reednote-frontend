@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, Ref, ref } from 'vue'
 import GlobalHeader from './components/Header.vue'
 import { useUserStore } from './stores/useUserStore';
 import axios from 'axios'
@@ -8,9 +8,17 @@ import { loadingEmitter } from './components/Loading.vue'
 import Footer from './components/Footer.vue'
 import Loading from './components/Loading.vue'
 import ModalAbstract from './components/ModalBase.vue'
+import useScrollToTop from './hooks/useScrollToTop'
 
 const userStore = useUserStore()
 const router = useRouter()
+
+const outmost: Ref<HTMLElement | null> = ref(null)
+
+router.beforeEach((to, from) => {
+  useScrollToTop(outmost)
+  return true
+})
 
 axios.interceptors.request.use((request) => {
   if (request.method != 'get' || request.url?.match(/\/notes\//) != null)
@@ -39,7 +47,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="h-screen overflow-scroll scrollbar-none">
+  <div ref="outmost" class="h-screen overflow-scroll scrollbar-none">
     <Loading />
     <ModalAbstract />
     <GlobalHeader />
@@ -47,7 +55,6 @@ onMounted(() => {
     <div class="min-h-screen overflow-scroll scrollbar-none">
       <router-view></router-view>
     </div>
-    
     <Footer />
   </div>
 </template>

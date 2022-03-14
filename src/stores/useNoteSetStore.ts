@@ -32,7 +32,6 @@ export const useNoteSetStore = defineStore('note-set', (): NoteSetStore => ({
     const resp = await axios.get('/note-sets')
     this.noteSetList = resp.data.data
     this.noteSetList.push(this.nullSet)
-    console.log(this.noteSetList);
 
   }
 

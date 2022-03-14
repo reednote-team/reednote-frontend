@@ -3,7 +3,7 @@ import { onMounted } from 'vue';
 import Note from '../components/NoteCover.vue';
 import { useNoteStore } from '../stores/useNoteStore'
 import { useNoteSetStore } from '../stores/useNoteSetStore'
-import NoteSet from '../components/NoteSetCover.vue';
+import NoteSetCover from '../components/NoteSetCover.vue';
 
 const noteStore = useNoteStore()
 const noteSetStore = useNoteSetStore()
@@ -12,7 +12,6 @@ onMounted(() => {
   noteStore.currentNote.id = 0
   noteStore.currentNote.title = 'untitled'
   noteStore.currentNote.content = ''
-
 
   noteStore.getNotes()
   noteSetStore.getNoteSets()
@@ -32,12 +31,12 @@ onMounted(() => {
       >To Write What You Think</span>
     </div>
     <div class="container mx-auto max-w-7xl">
-      <NoteSet v-for="noteSet in noteSetStore.noteSetList" :noteSet="noteSet">
+      <NoteSetCover v-for="noteSet in noteSetStore.noteSetList" :noteSet="noteSet">
         <Note
           v-for="note in noteStore.noteList.filter(note => note.noteSet == noteSet.id)"
           :id="note.id"
         />
-      </NoteSet>
+      </NoteSetCover>
     </div>
   </div>
 </template>

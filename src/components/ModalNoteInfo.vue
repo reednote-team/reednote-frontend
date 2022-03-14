@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { computed, onMounted, ref } from 'vue';
+import { compile, computed, onMounted, ref } from 'vue';
 import { NoteInfoModal } from './ModalBase.vue';
 import { alertEmitter } from './Alert.vue';
 import useQRCode from '../hooks/useQRCode';
@@ -31,12 +31,23 @@ const isNoteOwner = computed(() => {
   return userStore.isSignedIn && userStore.id == noteStore.currentNote.author
 })
 
+const isNewNote = computed(() => {
+  return noteStore.currentNote.id == -1
+})
+
 const QRArea = ref<HTMLElement | null>(null)
 
 const changeNoteTitle = (title: string) => {
-  if (title === noteStore.currentNote.title)
+  if (title === noteStore.currentNote.title) {
     return
+  }
+  
   noteStore.currentNote.title = title
+
+  if (isNewNote.value) {
+    return
+  }
+
   noteStore.patchNote({
     title: noteStore.currentNote.title
   })
@@ -92,12 +103,12 @@ onMounted(() => {
     <div class="text-base leading-relaxed text-stone-100">
       <input
         :value="filename"
-        :disabled="!isNoteOwner"
+        :disabled="!isNoteOwner && !isNewNote"
         @blur="changeNoteTitle(($event.target as HTMLInputElement).value)"
         class="appearance-none border rounded w-full py-2 px-3 text-stone-100 bg-transparent leading-tight focus:outline-none focus:border-cyan-500"
       />
     </div>
-    <div v-if="noteID && isNoteOwner">
+    <div v-if="!isNewNote && isNoteOwner">
       <div class="mx-auto h-64 w-64 bg-white" ref="QRArea"></div>
       <div class="w-fit mx-auto mt-4 mb-2">
         <button
