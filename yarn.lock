@@ -205,7 +205,7 @@
     tslib "^2.0.0"
     twemoji "^13.0.0"
 
-"@milkdown/core@^6.5.0":
+"@milkdown/core@^5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@milkdown/core/-/core-5.5.0.tgz#2eadc74ee2bfa46fec1607e10b0d8e368c9d725b"
   integrity sha512-D0f7sGbs+UY4Z/0fgTihT/e9Qk/P6EaBDxuTR5sJNT20dOoT5tWQCRRBjSzFleldzJGKILO0WEnB3ohhwoN5kA==
@@ -240,7 +240,7 @@
   dependencies:
     tslib "^2.3.1"
 
-"@milkdown/plugin-clipboard@^6.5.0":
+"@milkdown/plugin-clipboard@^5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@milkdown/plugin-clipboard/-/plugin-clipboard-5.5.0.tgz#03fa91f2fa1dedc5a33c48e79f22dc93dc1e504b"
   integrity sha512-bul8NWM8jGqzVkUZPROE7kCmUPwcZ4/e8loDtalMKZGOQPMIelhP8fvK2oM15fSmzL8Byu/so3ghoIK1v0jbsw==
@@ -248,7 +248,7 @@
     "@milkdown/utils" "5.5.0"
     tslib "^2.3.1"
 
-"@milkdown/plugin-cursor@^6.5.0":
+"@milkdown/plugin-cursor@^5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@milkdown/plugin-cursor/-/plugin-cursor-5.5.0.tgz#188f52b3e89b4cd94d2be8fbab786d9ae3eeaf18"
   integrity sha512-TuoDtaLYg0+Zfx4q6Rm4Y8Ct7w0qtDU3Z4cCLtDXrWZgr+9Y+vFc+U2wHH9rdkDI3Ln8/J0w97wjLcxUogJYaQ==
@@ -256,7 +256,7 @@
     "@milkdown/utils" "5.5.0"
     tslib "^2.3.1"
 
-"@milkdown/plugin-emoji@^6.5.0":
+"@milkdown/plugin-emoji@^5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@milkdown/plugin-emoji/-/plugin-emoji-5.5.0.tgz#543779ebc1e30f439f9f44567b92852ecade3e89"
   integrity sha512-PwVH+Ph9kmdkHjAq7wdMRwbj8+q8Ug4FlQJiWkTtWlhKC9/X9Wgfj03U0DvwgS6MSAhxwTNhy8YJZC4faaQ6oQ==
@@ -272,7 +272,7 @@
     twemoji "^13.1.0"
     unist-util-visit "^4.0.0"
 
-"@milkdown/plugin-history@^6.5.0":
+"@milkdown/plugin-history@^5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@milkdown/plugin-history/-/plugin-history-5.5.0.tgz#ed3b9246c7a932a7da2ccd25a3891a7b4efa0b23"
   integrity sha512-GmoFyj83OlnOQxu+4f0bzKDOblDK3mXFDdKka7GxX18Zx2J5geiQYzf+Ell12jipHzWZYwPs5Z6byJt2/eDx5A==
@@ -280,7 +280,7 @@
     "@milkdown/utils" "5.5.0"
     tslib "^2.3.1"
 
-"@milkdown/plugin-indent@^6.5.0":
+"@milkdown/plugin-indent@^5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@milkdown/plugin-indent/-/plugin-indent-5.5.0.tgz#22261ef2b67cd6338e5670398531f280e31da4fb"
   integrity sha512-4Uj+3O6CgnQbwmbCT6fxOFt6gCg6ftWnkh+lKr9n1u4HY2DpKSzaZcXGvF31bZ1g7pNTDs2txr59/GTZNhKYeg==
@@ -288,7 +288,7 @@
     "@milkdown/utils" "5.5.0"
     tslib "^2.3.1"
 
-"@milkdown/plugin-listener@^6.5.0":
+"@milkdown/plugin-listener@^5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@milkdown/plugin-listener/-/plugin-listener-5.5.0.tgz#17819261ae0bfab74d25acfe390add54bee8ade7"
   integrity sha512-3hDgDO0Kbg1NsRbdI0o2YLZf5VEDLOXEOkz0J8B9dM4kpwHKZDAQ9I17TG3MizD66E6FxacqM06lUo9sYUuRcA==
@@ -296,7 +296,7 @@
     "@milkdown/utils" "5.5.0"
     tslib "^2.3.1"
 
-"@milkdown/plugin-math@^6.5.0":
+"@milkdown/plugin-math@^5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@milkdown/plugin-math/-/plugin-math-5.5.0.tgz#9f0c06b1d2897cd345aba287f60b91db680b4b6a"
   integrity sha512-AntG1wsnUcWqAnIXXmrA8MU6tfWsrountPvR2Ny43izxCbsP4Dj05g3o/iFrVchNpPdo+BzTecObrqkb6kXz6Q==
@@ -307,7 +307,7 @@
     remark-math "^5.1.0"
     tslib "^2.3.1"
 
-"@milkdown/plugin-prism@^6.5.0":
+"@milkdown/plugin-prism@^5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@milkdown/plugin-prism/-/plugin-prism-5.5.0.tgz#d45bea3e816f29705e5c1aa78c25bd15e09c975d"
   integrity sha512-ycw97GLHCFuNnj3OMzy+ZLcsI+3JymuYeel7VJElJQdH1zzNOByBYwGPCZQoxYUUgCLkoM4xhjYpsQd8E6GlCQ==
@@ -317,7 +317,7 @@
     refractor "^4.0.0"
     tslib "^2.3.1"
 
-"@milkdown/plugin-slash@^6.5.0":
+"@milkdown/plugin-slash@^5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@milkdown/plugin-slash/-/plugin-slash-5.5.0.tgz#6d372f9b1e53fc27510eb6e75b83868f6e10bdbe"
   integrity sha512-7a/SZEOUylh1SNlrJD+yrWu8aUXr8KeR0r7BcjH4J0N+kdooN0XADBbTRHIswjRUlOQXv1IBbPDRRDN6suQnOg==
@@ -326,7 +326,7 @@
     smooth-scroll-into-view-if-needed "^1.1.32"
     tslib "^2.3.1"
 
-"@milkdown/plugin-tooltip@^6.5.0":
+"@milkdown/plugin-tooltip@^5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@milkdown/plugin-tooltip/-/plugin-tooltip-5.5.0.tgz#ad24f032a00b6b38f83c7705f00e63e2152bbf35"
   integrity sha512-HSwTB1jGPMSqo2kJVUsnMuPHADXSJFdLSkfNbQX8/APiYJlGbOw10Rq9/Y+ZbPTTF3odCd7EI2nr6vYoVHLCZQ==
@@ -334,7 +334,7 @@
     "@milkdown/utils" "5.5.0"
     tslib "^2.3.1"
 
-"@milkdown/plugin-upload@^6.5.0":
+"@milkdown/plugin-upload@^5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@milkdown/plugin-upload/-/plugin-upload-5.5.0.tgz#070a55989df1231b9bcaef7561cf8b677ddee3c8"
   integrity sha512-2UKqB7ruSHos7NKvHXvXSecEoV2G2Ys6J6qBAGfAdj0DyyCVb4f142NyJsRYT2pZtCR07Ey7qvpPDFEafoyHaQ==
@@ -342,7 +342,7 @@
     "@milkdown/utils" "5.5.0"
     tslib "^2.3.1"
 
-"@milkdown/preset-commonmark@^6.5.0":
+"@milkdown/preset-commonmark@^5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@milkdown/preset-commonmark/-/preset-commonmark-5.5.0.tgz#b6a9fd9bfc14fccf706c92416f3f4575655397d2"
   integrity sha512-zqDtGs7Tfx2KNZi4DOoEj7knbYrCpGkAevNSPFaU/G617eobCBpvusi5FgoGb1FLl2+TZP7DOXtvrTDZNvmCig==
@@ -351,7 +351,7 @@
     remark-inline-links "^6.0.0"
     tslib "^2.3.1"
 
-"@milkdown/preset-gfm@^6.5.0":
+"@milkdown/preset-gfm@^5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@milkdown/preset-gfm/-/preset-gfm-5.5.0.tgz#8ff22c0ad451223e5e0e9d6c875f33e737fd7cc1"
   integrity sha512-JdvitvHcp7/QUpDjczkD9RhIhOzErOoJKL1Udm1e4JSfEsJ80aioXjEcrJv5jSgI036Np1nBj2bdTgeFj5kmQQ==
@@ -391,7 +391,7 @@
     prosemirror-view "^1.23.2"
     tslib "^2.3.1"
 
-"@milkdown/theme-nord@^6.5.0":
+"@milkdown/theme-nord@^5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@milkdown/theme-nord/-/theme-nord-5.5.0.tgz#e93f87275bc332fbc9ae15f28c45a67c2e34637c"
   integrity sha512-HleuHbroPJIRGyt55M9iPhgeH3StphK7dfxN99ZCVLs3GoOYcl+5JCkoQp7xRrT7igJ1dczpoeZcpCuFx2Iu1A==
@@ -414,7 +414,7 @@
     "@milkdown/exception" "5.5.0"
     tslib "^2.3.1"
 
-"@milkdown/vue@^6.5.0":
+"@milkdown/vue@^5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@milkdown/vue/-/vue-5.5.0.tgz#0012e93cfa883a10d5095f488eb3be4123c4d247"
   integrity sha512-id1tieAW4BTChp3GOOKpBALnI2jskNds0nMcv3cjIbeXiW1e3VG0km/632pCf/vTeprWEFfO4aFcr7FL+WUvoQ==
@@ -1717,7 +1717,7 @@ material-icons@^1.10.4:
 
 mdast-util-definitions@^5.0.0:
   version "5.1.0"
-  resolved "https://registry.npmjs.org/mdast-util-definitions/-/mdast-util-definitions-5.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/mdast-util-definitions/-/mdast-util-definitions-5.1.0.tgz#b6d10ef00a3c4cf191e8d9a5fa58d7f4a366f817"
   integrity sha512-5hcR7FL2EuZ4q6lLMUK5w4lHT2H3vqL9quPvYZ/Ku5iifrirfMHiGdhxdXMUbUkDmz5I+TYMd7nbaxUhbQkfpQ==
   dependencies:
     "@types/mdast" "^3.0.0"
@@ -2585,7 +2585,7 @@ remark-gfm@^3.0.0:
 
 remark-inline-links@^6.0.0:
   version "6.0.1"
-  resolved "https://registry.npmjs.org/remark-inline-links/-/remark-inline-links-6.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/remark-inline-links/-/remark-inline-links-6.0.1.tgz#83ef8d4fc91aff04c8c8fa209104a8cac07c8724"
   integrity sha512-etdk1A0kRs+bXtT41XEFfyePOu583cmuHDF8bhAUfHJeCAPbPZpqmqZHD/wLhijIJV3ldjIvO4irM0jRGb1Dhg==
   dependencies:
     "@types/mdast" "^3.0.0"
@@ -2889,7 +2889,7 @@ unist-util-visit-parents@^5.0.0:
 
 unist-util-visit@^3.0.0:
   version "3.1.0"
-  resolved "https://registry.npmjs.org/unist-util-visit/-/unist-util-visit-3.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/unist-util-visit/-/unist-util-visit-3.1.0.tgz#9420d285e1aee938c7d9acbafc8e160186dbaf7b"
   integrity sha512-Szoh+R/Ll68QWAyQyZZpQzZQm2UPbxibDvaY8Xc9SUtYgPsDzx5AWSk++UUt2hJuow8mvwR+rG+LQLw+KsuAKA==
   dependencies:
     "@types/unist" "^2.0.0"
