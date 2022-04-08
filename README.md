@@ -45,7 +45,13 @@ clone this repo, go into the directory, then run:
 yarn
 ```
 
-When finished, run in development mode or build a production version with:
+When finished, remember to change the APIs url in `main.ts` to your own url:
+
+```typescript
+axios.defaults.baseURL = import.meta.env.PROD ? 'https://your.server.com/api' : 'http://localhost:1779/api'
+```
+
+run in development mode or build a production version with:
 
 ```bash
 yarn dev
