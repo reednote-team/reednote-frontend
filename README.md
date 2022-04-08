@@ -4,7 +4,7 @@ The project is mastered and led by: [KevynTang](https://github.com/KevynTang)
 
 ## About the project
 
-The Reednote project is an online note app project, 
+The Reednote project is an online note app project, **demo**: [ReedNote](https://reednote.kevyn.cn/)
 
 - Front end repo: [reednote-frontend](https://github.com/reednote-team/reednote-frontend)
 - Back end repo: [reednote-backend](https://github.com/reednote-team/reednote-backend)
@@ -36,8 +36,6 @@ The project mainly powered by the following techniques, frameworks or libs:
 - [Vite](https://vitejs.dev/)
 
 ## Install a instance
-
-
 
 For the front-end part, `yarn` is used to manage packages.
 
