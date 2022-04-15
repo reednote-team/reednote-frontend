@@ -2,16 +2,19 @@
 import { useUserStore } from '../stores/useUserStore';
 import { useNoteStore } from '../stores/useNoteStore';
 import { useRouter } from 'vue-router';
+import { useNoteSetStore } from '../stores/useNoteSetStore';
 
 const router = useRouter()
 
 const userStore = useUserStore()
 const noteStore = useNoteStore()
+const noteSetStore = useNoteSetStore()
 
 const logout = async () => {
   userStore.removeUser()
   noteStore.cleanNote()
   noteStore.noteList = []
+  noteSetStore.noteSetList = []
   router.push('/')
 }
 

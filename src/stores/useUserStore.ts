@@ -66,6 +66,5 @@ export const useUserStore = defineStore('user', (): UserStore => ({
     this.id = -1
     this.email = ''
     this.name = ''
-    // commit('getNotes', [])
   }
 }))
