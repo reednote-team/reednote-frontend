@@ -7,7 +7,7 @@ export const setForceLeave = (value: boolean): void => {
 </script>
 
 <script setup lang='ts'>
-import { computed, onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount, onMounted, ref } from 'vue'
 import MarkdownEditor from '../components/MarkdownEditor.vue'
 import { useRouter, useRoute, onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import Minimap from '../components/Minimap.vue'
@@ -47,6 +47,14 @@ if (route.params.id) {
 else {
   noteStore.cleanNote()
 }
+
+onMounted(() => {
+  window.onbeforeunload = () => {
+    if (noteStore.currentNote.needSave) {
+      return "Your work may lost if you close this page, continue? "
+    }
+  }
+})
 
 onBeforeRouteLeave((to, from, next) => {
   if (noteStore.currentNote.needSave == false) {
