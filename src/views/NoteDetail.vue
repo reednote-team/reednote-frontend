@@ -7,7 +7,7 @@ export const setForceLeave = (value: boolean): void => {
 </script>
 
 <script setup lang='ts'>
-import { computed, onBeforeMount, onMounted, ref } from 'vue'
+import { computed, onBeforeMount, onMounted, onUnmounted, ref } from 'vue'
 import MarkdownEditor from '../components/MarkdownEditor.vue'
 import { useRouter, useRoute, onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import Minimap from '../components/Minimap.vue'
@@ -59,9 +59,11 @@ onMounted(() => {
 onBeforeRouteLeave((to, from, next) => {
   if (noteStore.currentNote.needSave == false) {
     next(true)
+    window.onbeforeunload = () => {}
   }
   else if (forceLeave) {
     next(true)
+    window.onbeforeunload = () => {}
     forceLeave = false
   }
   else {
@@ -70,6 +72,7 @@ onBeforeRouteLeave((to, from, next) => {
       message: 'all content have not been saved may lost if you press confiem.',
       onModalConfirm() {
         next(true)
+        window.onbeforeunload = () => {}
       },
       onModalCancel() {
         next(false)

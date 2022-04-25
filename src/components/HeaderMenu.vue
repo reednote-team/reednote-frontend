@@ -176,7 +176,7 @@ const headerMenuItems: IItem[] = [
     icon: 'arrow_circle_down',
     text: null,
     disabled: computed(() => {
-      return !isInNoteView() || isANewNote()
+      return !isInNoteView()
     }),
     onClick: async () => {
       let text = noteStore.currentNote.content
