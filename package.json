@@ -24,6 +24,7 @@
     "@milkdown/prose": "^5.5.0",
     "@milkdown/theme-nord": "^5.5.0",
     "@milkdown/vue": "^5.5.0",
+    "@types/wicg-file-system-access": "^2020.9.5",
     "axios": "^0.24.0",
     "jwt-decode": "^3.1.2",
     "material-icons": "^1.10.4",
